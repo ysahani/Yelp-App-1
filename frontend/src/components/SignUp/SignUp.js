@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
-export default class SignUp extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
       password: '',
       persona: 'customer',
-      err: true,
+      // err: true,
     };
   }
 
@@ -52,23 +53,21 @@ export default class SignUp extends Component {
          .then((response) => {
            console.log('Status Code : ', response.status);
            if (response.status === 200) {
-             this.setState({
-               err: true,
-             });
+             this.props.signUserUp();
            } else {
-             this.setState({
-               err: false,
-             });
+             this.props.dontSignUserUp();
            }
          });
      }
 
      render() {
-       const { err } = this.state;
+       // const { isSignedUp } = this.props;
+       console.log(this.props.isSignedUp);
+       // const { err } = this.state;
        let errButton;
-       if (err === false) {
+       if (this.props.isSignedUp === false) {
          errButton = <p style={{ color: 'red', textAlign: 'center' }}>Username Already Registered!</p>;
-       } else if (err === true) {
+       } else if (this.props.isSignedUp === true) {
          errButton = null;
        }
        const { persona } = this.state;
@@ -89,7 +88,7 @@ export default class SignUp extends Component {
              <br />
              <label htmlFor="password">
                Password:
-               <input type="text" id="password" name="password" onChange={this.passwordChange} />
+               <input type="password" id="password" name="password" onChange={this.passwordChange} />
              </label>
              <br />
              <br />
@@ -106,12 +105,12 @@ export default class SignUp extends Component {
              <br />
              <label htmlFor="email">
                Email ID:
-               <input type="text" id="email" name="email" />
+               <input type="text" id="email" name="email" onChange={this.emailChange} />
              </label>
              <br />
              <label htmlFor="password">
                Password:
-               <input type="text" id="password" name="password" />
+               <input type="password" id="password" name="password" onChange={this.passwordChange} />
              </label>
              <br />
              <label htmlFor="location">
@@ -139,3 +138,14 @@ export default class SignUp extends Component {
        );
      }
 }
+
+const mapStateToProps = (state) => ({
+  isSignedUp: state.isSignedUp,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  signUserUp: () => { dispatch({ type: 'SIGNUP_USER' }); },
+  dontSignUserUp: () => { dispatch({ type: 'DONT_SIGNUP_USER' }); },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

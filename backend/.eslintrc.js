@@ -20,5 +20,6 @@ module.exports = {
   rules: {
     'no-console': 0,
     'linebreak-style': 0,
+    'react/destructuring-assignment': 0,
   },
 };

@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const session = require('express-session');
-// const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 app.set('view engine', 'ejs');
@@ -41,6 +41,32 @@ const restaurants = [
 
 const customers = [
   { username: 'admin2', password: 'admin2' }];
+
+// Route to handle Post Request Call
+app.post('/login', (req, res) => {
+  console.log('Inside Login Post Request');
+  console.log('Req Body : ', req.body);
+  let isThere = false;
+  for (let i = 0; i < restaurants.length; i += 1) {
+    if (req.body.user === restaurants[i].username) {
+      if (req.body.pass === restaurants[i].password) {
+        isThere = true;
+        break;
+      }
+    }
+  }
+
+  if (isThere === true) {
+    res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
+    res.writeHead(200, {
+      'Content-Type': 'text/plain',
+    });
+    res.end('Successful Login');
+  } else if (isThere === false) {
+    res.writeHead(202, { 'Content-Type': 'text/html' });
+    res.end('Unsuccessful Login');
+  }
+});
 
 app.post('/signup', (req, res) => {
   let isThere = false;

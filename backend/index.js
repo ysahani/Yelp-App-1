@@ -77,7 +77,7 @@ app.post('/signup', (req, res) => {
       }
     }
   } else if (req.body.pers === 'restaurant') {
-    for (let i = 0; i < customers.length; i += 1) {
+    for (let i = 0; i < restaurants.length; i += 1) {
       if (restaurants[i].username === req.body.user) {
         isThere = true;
       }

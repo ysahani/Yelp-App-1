@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
 
-export default class LogIn extends Component {
+class LogIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
       password: '',
-      err: true,
+      // err: true,
     };
   }
 
@@ -45,27 +46,23 @@ export default class LogIn extends Component {
       .then((response) => {
         console.log('Status Code : ', response.status);
         if (response.status === 200) {
-          this.setState({
-            err: true,
-          });
+          this.props.logUserIn();
         } else {
-          this.setState({
-            err: false,
-          });
+          this.props.dontLogUserIn();
         }
       });
   }
 
   render() {
-    const { err } = this.state;
+    // const { err } = this.state;
     let errButton;
-    if (err === false) {
+    if (this.props.isLoggedIn === false) {
       errButton = <p style={{ color: 'red', textAlign: 'center' }}>Please Enter Correct Credentials</p>;
-    } else if (err === true) {
+    } else if (this.props.isLoggedIn === true) {
       errButton = null;
     }
     let redirectVar = null;
-    if (cookie.load('cookie')) {
+    if (this.props.isLoggedIn === true) {
       redirectVar = <Redirect to="/restaurantpage" />;
     }
     return (
@@ -73,13 +70,11 @@ export default class LogIn extends Component {
         { redirectVar }
         <form>
           <label htmlFor="fname">
-            Email ID:
-            <input type="text" id="email" name="email" onChange={this.handleUsername} />
+            <input placeholder="Email" type="text" id="email" name="email" onChange={this.handleUsername} />
           </label>
           <br />
           <label htmlFor="lname">
-            Password:
-            <input type="password" id="password" name="password" onChange={this.handlePassword} />
+            <input placeholder="Password" type="password" id="password" name="password" onChange={this.handlePassword} />
           </label>
           <br />
           <button onClick={this.submitLogin} type="submit">Log In</button>
@@ -89,3 +84,14 @@ export default class LogIn extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.isLoggedIn,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  logUserIn: () => { dispatch({ type: 'LOGIN_USER' }); },
+  dontLogUserIn: () => { dispatch({ type: 'DONT_LOGIN_USER' }); },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

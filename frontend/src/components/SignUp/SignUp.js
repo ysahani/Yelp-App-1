@@ -61,6 +61,7 @@ class SignUp extends Component {
      }
 
      render() {
+       console.log(this.state.persona);
        // const { isSignedUp } = this.props;
        console.log(this.props.isSignedUp);
        // const { err } = this.state;
@@ -77,18 +78,15 @@ class SignUp extends Component {
            <div style={{ textAlign: 'center' }}>
              <br />
              <label htmlFor="name">
-               Name:
-               <input type="text" id="name" name="name" />
+               <input placeholder="Name" type="text" id="name" name="name" />
              </label>
              <br />
              <label htmlFor="email">
-               Email ID:
-               <input type="text" id="email" name="email" onChange={this.emailChange} />
+               <input placeholder="Email" type="text" id="email" name="email" onChange={this.emailChange} />
              </label>
              <br />
              <label htmlFor="password">
-               Password:
-               <input type="password" id="password" name="password" onChange={this.passwordChange} />
+               <input placeholder="Password" type="password" id="password" name="password" onChange={this.passwordChange} />
              </label>
              <br />
              <br />
@@ -99,23 +97,19 @@ class SignUp extends Component {
            <div>
              <br />
              <label htmlFor="name">
-               Restaurant Name:
-               <input type="text" id="name" name="name" />
+               <input placeholder="Restaurant Name" type="text" id="name" name="name" />
              </label>
              <br />
              <label htmlFor="email">
-               Email ID:
-               <input type="text" id="email" name="email" onChange={this.emailChange} />
+               <input placeholder="Email" type="text" id="email" name="email" onChange={this.emailChange} />
              </label>
              <br />
              <label htmlFor="password">
-               Password:
-               <input type="password" id="password" name="password" onChange={this.passwordChange} />
+               <input placeholder="Password" type="password" id="password" name="password" onChange={this.passwordChange} />
              </label>
              <br />
              <label htmlFor="location">
-               Location:
-               <input type="text" id="location" name="location" />
+               <input placeholder="Location" type="text" id="location" name="location" />
              </label>
              <br />
              <br />

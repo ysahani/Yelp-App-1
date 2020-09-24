@@ -1,0 +1,16 @@
+#header {
+    text-align: center;
+}
+
+#line {
+    width: 50%;
+    background-color: grey;
+}
+#about {
+    margin-top: -30px ;
+    text-align: center;
+}
+
+#aboutName {
+    color: #d32323;
+}

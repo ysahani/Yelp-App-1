@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import cookie from 'react-cookies';
 import { connect } from 'react-redux';
+import Yelp from '../../yelp.png';
 
 class Navbar extends Component {
   constructor(props) {
@@ -53,6 +54,7 @@ class Navbar extends Component {
             <ul className="nav navbar-nav">
               <li><Link style={{ color: 'white' }} to="/signup">Signup</Link></li>
             </ul>
+            <img src={Yelp} alt="" style={{ width: '200px', marginLeft: '450px' }} />
             {navLogin}
           </div>
         </nav>

@@ -1,11 +1,13 @@
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['isSignedUp', 'isLoggedIn', 'email', 'name', 'location', 'description', 'timings']
+};
 const createState = {
-  isSignedUp: null,
-  isLoggedIn: null,
-  name: '',
-  location: '',
-  email: '',
-  description: '',
-  timings: '',
+
 };
 const appReducer = (state = createState, action) => {
   if (action.type === 'SIGNUP_USER') {
@@ -38,7 +40,6 @@ const appReducer = (state = createState, action) => {
   }
   if (action.type === 'SIGN_OUT') {
     return {
-      ...state,
       isSignedUp: null,
       isLoggedIn: null,
     };
@@ -56,4 +57,4 @@ const appReducer = (state = createState, action) => {
   return state;
 };
 
-export default appReducer;
+export default persistReducer(persistConfig, appReducer);

@@ -75,6 +75,8 @@ class LogIn extends Component {
     return (
       <div style={{ textAlign: 'center' }}>
         { redirectVar }
+        <h2 style={{ color: '#d32323' }}>Log in to Yelp</h2>
+        <br />
         <form>
           <label htmlFor="fname">
             <input placeholder="Email" type="text" id="email" name="email" onChange={this.handleUsername} />

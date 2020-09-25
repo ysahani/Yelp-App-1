@@ -22,7 +22,7 @@ class RestaurantPage extends Component {
           <ul style={{ listStyle: 'none' }}>
             <li id="update"><Link to="/updateprofile">Update Your Page</Link></li>
             <li><Link to="/restaurantpage">Profile Overview</Link></li>
-            <li><Link to="/signup">Menu</Link></li>
+            <li><Link to="/menu">Menu</Link></li>
             <li><Link to="/reviewspage">Reviews</Link></li>
           </ul>
         </div>

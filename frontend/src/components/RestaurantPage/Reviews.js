@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Reviews.css';
 
-export default class Reviews extends Component {
+class Reviews extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,14 +14,14 @@ export default class Reviews extends Component {
     return (
       <div>
         <div id="header">
-          <h1>Name</h1>
-          <h2>Location</h2>
+          <h1>{this.props.rname}</h1>
+          <h2>{this.props.location}</h2>
           <hr id="line" />
         </div>
         <div>
           <ul style={{ listStyle: 'none' }}>
             <li><Link to="/restaurantpage">Profile Overview</Link></li>
-            <li><Link to="/signup">Menu</Link></li>
+            <li><Link to="/menu">Menu</Link></li>
             <li><Link to="/reviewspage">Reviews</Link></li>
           </ul>
         </div>
@@ -46,3 +47,13 @@ export default class Reviews extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  rname: state.name,
+  location: state.location,
+  email: state.email,
+  timings: state.timings,
+  description: state.description,
+});
+
+export default connect(mapStateToProps)(Reviews);

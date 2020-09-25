@@ -72,6 +72,7 @@ class SignUp extends Component {
            console.log('Status Code : ', response.status);
            if (response.status === 200) {
              this.props.signUserUp();
+             this.props.history.push('/login');
            } else {
              this.props.dontSignUserUp();
            }
@@ -136,6 +137,8 @@ class SignUp extends Component {
        }
        return (
          <div style={{ textAlign: 'center' }}>
+           <h2 style={{ color: '#d32323' }}>Sign Up for Yelp</h2>
+           <br />
            <label htmlFor="persona">
              Choose a Persona:
              <select id="persona" onChange={this.handleChange} value={persona}>

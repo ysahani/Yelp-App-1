@@ -1,6 +1,11 @@
 const createState = {
   isSignedUp: null,
   isLoggedIn: null,
+  name: '',
+  location: '',
+  email: '',
+  description: '',
+  timings: '',
 };
 const appReducer = (state = createState, action) => {
   if (action.type === 'SIGNUP_USER') {
@@ -18,6 +23,10 @@ const appReducer = (state = createState, action) => {
   if (action.type === 'LOGIN_USER') {
     return {
       ...state,
+      name: action.rname,
+      location: action.location,
+      email: action.email,
+      isSignedUp: true,
       isLoggedIn: true,
     };
   }
@@ -30,7 +39,18 @@ const appReducer = (state = createState, action) => {
   if (action.type === 'SIGN_OUT') {
     return {
       ...state,
+      isSignedUp: null,
       isLoggedIn: null,
+    };
+  }
+  if (action.type === 'UPDATE_PROFILE') {
+    return {
+      ...state,
+      email: action.email,
+      name: action.rname,
+      location: action.location,
+      description: action.description,
+      timings: action.timings,
     };
   }
   return state;

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './RestaurantPage.css';
 
-export default class RestaurantPage extends Component {
+class RestaurantPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,12 +14,13 @@ export default class RestaurantPage extends Component {
     return (
       <div>
         <div id="header">
-          <h1>Name</h1>
-          <h2>Location</h2>
+          <h1>{this.props.rname}</h1>
+          <h2>{this.props.location}</h2>
           <hr id="line" />
         </div>
         <div>
           <ul style={{ listStyle: 'none' }}>
+            <li id="update"><Link to="/updateprofile">Update Your Page</Link></li>
             <li><Link to="/restaurantpage">Profile Overview</Link></li>
             <li><Link to="/signup">Menu</Link></li>
             <li><Link to="/reviewspage">Reviews</Link></li>
@@ -30,22 +32,32 @@ export default class RestaurantPage extends Component {
           </h4>
           <h5 className="subtitle">
             <b>Location</b>
-            <p>hi</p>
+            <p>{this.props.location}</p>
           </h5>
           <h5 className="subtitle">
             <b>Description</b>
-            <p>hi</p>
+            <p>{this.props.description}</p>
           </h5>
           <h5 className="subtitle">
             <b>Contact Information</b>
-            <p>hi</p>
+            <p>{this.props.email}</p>
           </h5>
           <h5 className="subtitle">
             <b>Timings</b>
-            <p>hi</p>
+            <p>{this.props.timings}</p>
           </h5>
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  rname: state.name,
+  location: state.location,
+  email: state.email,
+  timings: state.timings,
+  description: state.description,
+});
+
+export default connect(mapStateToProps)(RestaurantPage);

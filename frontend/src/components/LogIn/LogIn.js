@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
@@ -10,6 +9,8 @@ class LogIn extends Component {
     this.state = {
       username: '',
       password: '',
+      restaurantName: '',
+      location: '',
       // err: true,
     };
   }
@@ -46,7 +47,13 @@ class LogIn extends Component {
       .then((response) => {
         console.log('Status Code : ', response.status);
         if (response.status === 200) {
-          this.props.logUserIn();
+          this.setState({
+            restaurantName: response.data.rname,
+            location: response.data.location,
+          });
+          const { restaurantName } = this.state;
+          const { location } = this.state;
+          this.props.logUserIn(username, restaurantName, location);
         } else {
           this.props.dontLogUserIn();
         }
@@ -90,7 +97,11 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  logUserIn: () => { dispatch({ type: 'LOGIN_USER' }); },
+  logUserIn: (user, name, loc) => {
+    dispatch({
+      type: 'LOGIN_USER', email: user, rname: name, location: loc,
+    });
+  },
   dontLogUserIn: () => { dispatch({ type: 'DONT_LOGIN_USER' }); },
 });
 

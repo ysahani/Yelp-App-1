@@ -37,7 +37,9 @@ app.use((req, res, next) => {
 });
 
 const restaurants = [
-  { username: 'admin1', password: 'admin1' }];
+  {
+    username: 'admin1@gmail.com', password: 'admin1', location: 'Fremont, CA', rname: 'Chevys',
+  }];
 
 const customers = [
   { username: 'admin2', password: 'admin2' }];
@@ -47,10 +49,12 @@ app.post('/login', (req, res) => {
   console.log('Inside Login Post Request');
   console.log('Req Body : ', req.body);
   let isThere = false;
+  let theOBJ;
   for (let i = 0; i < restaurants.length; i += 1) {
     if (req.body.user === restaurants[i].username) {
       if (req.body.pass === restaurants[i].password) {
         isThere = true;
+        theOBJ = restaurants[i];
         break;
       }
     }
@@ -58,10 +62,11 @@ app.post('/login', (req, res) => {
 
   if (isThere === true) {
     res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
+    res.send(theOBJ);
     res.writeHead(200, {
       'Content-Type': 'text/plain',
     });
-    res.end('Successful Login');
+    res.end('Successful Login!');
   } else if (isThere === false) {
     res.writeHead(202, { 'Content-Type': 'text/html' });
     res.end('Unsuccessful Login');
@@ -88,7 +93,9 @@ app.post('/signup', (req, res) => {
     if (req.body.pers === 'customer') {
       customers.push({ username: req.body.user, password: req.body.pass });
     } else if (req.body.pers === 'restaurant') {
-      restaurants.push({ username: req.body.user, password: req.body.pass });
+      restaurants.push({
+        username: req.body.user, password: req.body.pass, location: req.body.loc, rname: req.body.rname,
+      });
     }
 
     res.cookie('remember', '1', { maxAge: 900000, httpOnly: false, path: '/' });

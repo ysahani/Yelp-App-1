@@ -9,6 +9,8 @@ class SignUp extends Component {
       username: '',
       password: '',
       persona: 'customer',
+      restaurantName: '',
+      location: '',
       // err: true,
     };
   }
@@ -31,6 +33,18 @@ class SignUp extends Component {
     });
   }
 
+  restaurantNameChange = (e) => {
+    this.setState({
+      restaurantName: e.target.value,
+    });
+  }
+
+  locationChange = (e) => {
+    this.setState({
+      location: e.target.value,
+    });
+  }
+
      // submit Login handler to send a request to the node backend
      submitLogin = (e) => {
        // const headers = new Headers();
@@ -40,11 +54,15 @@ class SignUp extends Component {
        const { username } = this.state;
        const { password } = this.state;
        const { persona } = this.state;
+       const { location } = this.state;
+       const { restaurantName } = this.state;
 
        const data = {
          user: username,
          pass: password,
          pers: persona,
+         loc: location,
+         rname: restaurantName,
        };
        // set the with credentials to true
        axios.defaults.withCredentials = true;
@@ -97,7 +115,7 @@ class SignUp extends Component {
            <div>
              <br />
              <label htmlFor="name">
-               <input placeholder="Restaurant Name" type="text" id="name" name="name" />
+               <input placeholder="Restaurant Name" type="text" id="name" name="name" onChange={this.restaurantNameChange} />
              </label>
              <br />
              <label htmlFor="email">
@@ -109,7 +127,7 @@ class SignUp extends Component {
              </label>
              <br />
              <label htmlFor="location">
-               <input placeholder="Location" type="text" id="location" name="location" />
+               <input placeholder="Location" type="text" id="location" name="location" onChange={this.locationChange} />
              </label>
              <br />
              <br />

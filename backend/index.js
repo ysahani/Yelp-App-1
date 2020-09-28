@@ -1,7 +1,20 @@
 // import the require dependencies
 const express = require('express');
+const mysql = require('mysql');
 
 const app = express();
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'Ydvhs2015~',
+  database: 'yelp_db',
+});
+db.connect((err) => {
+  if (err) {
+    throw err;
+  }
+  console.log('MySQL Connected...');
+});
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
@@ -48,66 +61,118 @@ const customers = [
 app.post('/login', (req, res) => {
   console.log('Inside Login Post Request');
   console.log('Req Body : ', req.body);
-  let isThere = false;
-  let theOBJ;
-  for (let i = 0; i < restaurants.length; i += 1) {
-    if (req.body.user === restaurants[i].username) {
-      if (req.body.pass === restaurants[i].password) {
-        isThere = true;
-        theOBJ = restaurants[i];
-        break;
-      }
-    }
-  }
 
-  if (isThere === true) {
-    res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
-    res.send(theOBJ);
-    res.writeHead(200, {
-      'Content-Type': 'text/plain',
-    });
-    res.end('Successful Login!');
-  } else if (isThere === false) {
-    res.writeHead(202, { 'Content-Type': 'text/html' });
-    res.end('Unsuccessful Login');
-  }
+  db.query(`SELECT * FROM restaurant_user WHERE email ='${req.body.user}' AND password = '${req.body.pass}'`, (err, result) => {
+    if (result.length > 0) {
+      res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
+      res.send({ rname: result[0].r_name, location: result[0].location });
+      // res.writeHead(200, {
+      //   'Content-Type': 'text/plain',
+      // });
+      // res.end('Successful Login!');
+    } else {
+      res.writeHead(202, { 'Content-Type': 'text/html' });
+      res.end('Unsuccessful Login');
+    }
+  });
+
+  // if (isThere === true) {
+  //   res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
+  //   // let theOBJ = {username: 'admin1@gmail.com', password: 'admin1', location: 'Fremont, CA', rname: 'Chevys'};
+  //   // res.send(theOBJ);
+  //   res.writeHead(200, {
+  //     'Content-Type': 'text/plain',
+  //   });
+  //   res.end('Successful Login!');
+  // } else if (isThere === false) {
+  //   res.writeHead(202, { 'Content-Type': 'text/html' });
+  //   res.end('Unsuccessful Login');
+  // }
 });
 
 app.post('/signup', (req, res) => {
-  let isThere = false;
+  // let isThere = false;
+  // if (req.body.pers === 'customer') {
+  //   for (let i = 0; i < customers.length; i += 1) {
+  //     if (customers[i].username === req.body.user) {
+  //       isThere = true;
+  //     }
+  //   }
+  // } else if (req.body.pers === 'restaurant') {
+  //   // for (let i = 0; i < restaurants.length; i += 1) {
+  //   //   if (restaurants[i].username === req.body.user) {
+  //   //     isThere = true;
+  //   //   }
+  //   // }
+  //   db.query(`SELECT * FROM restaurant_user WHERE email = '${req.body.user}'`, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //     }
+
+  //     if (result.length > 0) {
+  //       if (result) {
+  //         console.log(result);
+  //         isThere = true;
+  //       }
+  //     }
+  //     // console.log(result);
+  //   });
+  // }
+
+  // if (isThere === false) {
+  //   if (req.body.pers === 'customer') {
+  //     customers.push({ username: req.body.user, password: req.body.pass });
+  //   } else if (req.body.pers === 'restaurant') {
+  //     // restaurants.push({
+  //     //   username: req.body.user, password: req.body.pass, location: req.body.loc, rname: req.body.rname,
+  //     // });
+  //     const restaurant = {
+  //       email: req.body.user, password: req.body.pass, location: req.body.loc, r_name: req.body.rname, timings: '', description: '',
+  //     };
+  //     const sql = 'INSERT INTO restaurant_user SET ?';
+  //     const query = db.query(sql, restaurant, (err, result) => {
+  //       if (err) {
+  //         console.log(err);
+  //       }
+  //       // console.log(result);
+  //     });
+  //   }
+
+  //   res.cookie('remember', '1', { maxAge: 900000, httpOnly: false, path: '/' });
+  //   res.writeHead(200, {
+  //     'Content-Type': 'application/json',
+  //   });
+  //   res.end('Success!');
+  // } else {
+  //   res.writeHead(202, {
+  //     'Content-Type': 'application/json',
+  //   });
+  //   res.end('Unsuccess!');
+  // }
   if (req.body.pers === 'customer') {
-    for (let i = 0; i < customers.length; i += 1) {
-      if (customers[i].username === req.body.user) {
-        isThere = true;
-      }
-    }
+    customers.push({ username: req.body.user, password: req.body.pass });
   } else if (req.body.pers === 'restaurant') {
-    for (let i = 0; i < restaurants.length; i += 1) {
-      if (restaurants[i].username === req.body.user) {
-        isThere = true;
+    // restaurants.push({
+    //   username: req.body.user, password: req.body.pass, location: req.body.loc, rname: req.body.rname,
+    // });
+    const restaurant = {
+      email: req.body.user, password: req.body.pass, location: req.body.loc, r_name: req.body.rname, timings: '', description: '',
+    };
+    const sql = 'INSERT INTO restaurant_user SET ?';
+    const query = db.query(sql, restaurant, (err, result) => {
+      if (err) {
+        res.writeHead(202, {
+          'Content-Type': 'application/json',
+        });
+        res.end('Unsuccess!');
+      } else {
+        res.cookie('remember', '1', { maxAge: 900000, httpOnly: false, path: '/' });
+        res.writeHead(200, {
+          'Content-Type': 'application/json',
+        });
+        res.end('Success!');
       }
-    }
-  }
-
-  if (isThere === false) {
-    if (req.body.pers === 'customer') {
-      customers.push({ username: req.body.user, password: req.body.pass });
-    } else if (req.body.pers === 'restaurant') {
-      restaurants.push({
-        username: req.body.user, password: req.body.pass, location: req.body.loc, rname: req.body.rname,
-      });
-    }
-
-    res.cookie('remember', '1', { maxAge: 900000, httpOnly: false, path: '/' });
-    res.writeHead(200, {
-      'Content-Type': 'application/json',
     });
-    res.end('Success!');
-  } else {
-    res.writeHead(202, {
-      'Content-Type': 'application/json',
-    });
-    res.end('Unsuccess!');
   }
 });
 

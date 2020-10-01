@@ -7,6 +7,7 @@ import RestaurantPage from './RestaurantPage/RestaurantPage';
 import ReviewsPage from './RestaurantPage/Reviews';
 import UpdateProfile from './RestaurantPage/UpdateProfile';
 import Menu from './RestaurantPage/Menu';
+import Customer from './CustomerPage/CustomerPage';
 
 // Create a Main Component
 class Main extends Component {
@@ -27,6 +28,7 @@ class Main extends Component {
         <Route path="/reviewspage" component={ReviewsPage} />
         <Route path="/updateprofile" component={UpdateProfile} />
         <Route path="/menu" component={Menu} />
+        <Route path="/customerpage" component={Customer} />
       </div>
     );
   }

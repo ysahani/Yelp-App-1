@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 class UpdateProfile extends Component {
   constructor(props) {
@@ -50,8 +51,24 @@ class UpdateProfile extends Component {
     const { description } = this.state;
     const { email } = this.state;
     const { timings } = this.state;
+    const data = {
+      rname: name,
+      loc: location,
+      desc: description,
+      emailid: email,
+      time: timings,
+    };
     this.props.updateProfile(email, name, location, description, timings);
-    this.props.history.push('/restaurantpage');
+    // make a post request with the user data
+    axios.post('http://localhost:3001/updateprofile', data)
+      .then((response) => {
+        console.log('Status Code : ', response.status);
+        if (response.status === 200) {
+          this.props.history.push('/restaurantpage');
+        } else {
+          console.log('Post error in update restaurant!');
+        }
+      });
   }
 
   render() {

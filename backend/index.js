@@ -61,21 +61,63 @@ const customers = [
 app.post('/login', (req, res) => {
   console.log('Inside Login Post Request');
   console.log('Req Body : ', req.body);
+  let isThere = false;
 
-  db.query(`SELECT * FROM restaurant_user WHERE email ='${req.body.user}' AND password = '${req.body.pass}'`, (err, result) => {
+  db.query(`SELECT * FROM restaurant_user WHERE email = '${req.body.user}' AND password = '${req.body.pass}'`, (err, result) => {
     if (result.length > 0) {
+      console.log('RESULT');
+      isThere = true;
       res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
       res.send({ rname: result[0].r_name, location: result[0].location });
       // res.writeHead(200, {
       //   'Content-Type': 'text/plain',
       // });
-      // res.end('Successful Login!');
-    } else {
-      res.writeHead(202, { 'Content-Type': 'text/html' });
-      res.end('Unsuccessful Login');
+      return res.end('Successful Login!');
     }
-  });
+    db.query(`SELECT * FROM customer_user WHERE email = '${req.body.user}' AND password = '${req.body.pass}'`, (err, result) => {
+      console.log('USERs');
+      console.log(err);
+      if (result.length > 0) {
+        isThere = true;
+        console.log('USERs');
+        res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
+        res.send({ persona: 'customer' });
+        // res.writeHead(200, {
+        //   'Content-Type': 'text/plain',
+        // });
+        res.end('Successful Login!');
+      } else {
+        res.writeHead(202, {
+          'Content-Type': 'application/json',
+        });
+        res.end('Unsuccess!');
+      }
+    });
 
+    // isThere = false;
+  });
+  console.log(isThere);
+  // if (isThere === false) {
+  //   db.query(`SELECT * FROM customer_user WHERE email = '${req.body.user}' AND password = '${req.body.pass}'`, (err, result) => {
+  //     console.log('USERs');
+  //     console.log(err);
+  //     if (result.length > 0) {
+  //       isThere = true;
+  //       console.log('USERs');
+  //       res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
+  //       res.send({ rname: result[0].r_name, location: result[0].location });
+  //       // res.writeHead(200, {
+  //       //   'Content-Type': 'text/plain',
+  //       // });
+  //       res.end('Successful Login!');
+  //     } else {
+  //       res.writeHead(202, {
+  //         'Content-Type': 'application/json',
+  //       });
+  //       res.end('Unsuccess!');
+  //     }
+  //   });
+  // }
   // if (isThere === true) {
   //   res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
   //   // let theOBJ = {username: 'admin1@gmail.com', password: 'admin1', location: 'Fremont, CA', rname: 'Chevys'};
@@ -91,70 +133,26 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/signup', (req, res) => {
-  // let isThere = false;
-  // if (req.body.pers === 'customer') {
-  //   for (let i = 0; i < customers.length; i += 1) {
-  //     if (customers[i].username === req.body.user) {
-  //       isThere = true;
-  //     }
-  //   }
-  // } else if (req.body.pers === 'restaurant') {
-  //   // for (let i = 0; i < restaurants.length; i += 1) {
-  //   //   if (restaurants[i].username === req.body.user) {
-  //   //     isThere = true;
-  //   //   }
-  //   // }
-  //   db.query(`SELECT * FROM restaurant_user WHERE email = '${req.body.user}'`, (err, result) => {
-  //     if (err) {
-  //       console.log(err);
-  //     }
-
-  //     if (result.length > 0) {
-  //       if (result) {
-  //         console.log(result);
-  //         isThere = true;
-  //       }
-  //     }
-  //     // console.log(result);
-  //   });
-  // }
-
-  // if (isThere === false) {
-  //   if (req.body.pers === 'customer') {
-  //     customers.push({ username: req.body.user, password: req.body.pass });
-  //   } else if (req.body.pers === 'restaurant') {
-  //     // restaurants.push({
-  //     //   username: req.body.user, password: req.body.pass, location: req.body.loc, rname: req.body.rname,
-  //     // });
-  //     const restaurant = {
-  //       email: req.body.user, password: req.body.pass, location: req.body.loc, r_name: req.body.rname, timings: '', description: '',
-  //     };
-  //     const sql = 'INSERT INTO restaurant_user SET ?';
-  //     const query = db.query(sql, restaurant, (err, result) => {
-  //       if (err) {
-  //         console.log(err);
-  //       }
-  //       // console.log(result);
-  //     });
-  //   }
-
-  //   res.cookie('remember', '1', { maxAge: 900000, httpOnly: false, path: '/' });
-  //   res.writeHead(200, {
-  //     'Content-Type': 'application/json',
-  //   });
-  //   res.end('Success!');
-  // } else {
-  //   res.writeHead(202, {
-  //     'Content-Type': 'application/json',
-  //   });
-  //   res.end('Unsuccess!');
-  // }
   if (req.body.pers === 'customer') {
-    customers.push({ username: req.body.user, password: req.body.pass });
+    const customer = {
+      email: req.body.user, password: req.body.pass, name: req.body.cname,
+    };
+    const sql = 'INSERT INTO customer_user SET ?';
+    const query = db.query(sql, customer, (err, result) => {
+      if (err) {
+        res.writeHead(202, {
+          'Content-Type': 'application/json',
+        });
+        res.end('Unsuccess!');
+      } else {
+        res.cookie('remember', '1', { maxAge: 900000, httpOnly: false, path: '/' });
+        res.writeHead(200, {
+          'Content-Type': 'application/json',
+        });
+        res.end('Success!');
+      }
+    });
   } else if (req.body.pers === 'restaurant') {
-    // restaurants.push({
-    //   username: req.body.user, password: req.body.pass, location: req.body.loc, rname: req.body.rname,
-    // });
     const restaurant = {
       email: req.body.user, password: req.body.pass, location: req.body.loc, r_name: req.body.rname, timings: '', description: '',
     };
@@ -174,6 +172,25 @@ app.post('/signup', (req, res) => {
       }
     });
   }
+});
+
+app.post('/updateprofile', (req, res) => {
+  const restaurant = {
+    email: req.body.emailid, location: req.body.loc, r_name: req.body.rname, timings: req.body.time, description: req.body.desc,
+  };
+  db.query(`UPDATE restaurant_user SET r_name = '${restaurant.r_name}', location = '${restaurant.location}', timings = '${restaurant.timings}', description = '${restaurant.description}' WHERE email = '${restaurant.email}'`, (err, result) => {
+    if (err) {
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
 });
 
 // start your server on port 3001

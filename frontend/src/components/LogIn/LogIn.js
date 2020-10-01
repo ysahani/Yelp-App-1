@@ -47,6 +47,9 @@ class LogIn extends Component {
       .then((response) => {
         console.log('Status Code : ', response.status);
         if (response.status === 200) {
+          if(response.data.persona && response.data.persona === 'customer') {
+            this.props.history.push('/customerpage');
+          }
           this.setState({
             restaurantName: response.data.rname,
             location: response.data.location,

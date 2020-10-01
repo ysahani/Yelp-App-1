@@ -10,6 +10,7 @@ class SignUp extends Component {
       password: '',
       persona: 'customer',
       restaurantName: '',
+      customerName: '',
       location: '',
       // err: true,
     };
@@ -45,6 +46,12 @@ class SignUp extends Component {
     });
   }
 
+  customerNameChange = (e) => {
+    this.setState({
+      customerName: e.target.value,
+    });
+  }
+
      // submit Login handler to send a request to the node backend
      submitLogin = (e) => {
        // const headers = new Headers();
@@ -56,6 +63,7 @@ class SignUp extends Component {
        const { persona } = this.state;
        const { location } = this.state;
        const { restaurantName } = this.state;
+       const { customerName } = this.state;
 
        const data = {
          user: username,
@@ -63,6 +71,7 @@ class SignUp extends Component {
          pers: persona,
          loc: location,
          rname: restaurantName,
+         cname: customerName,
        };
        // set the with credentials to true
        axios.defaults.withCredentials = true;
@@ -97,7 +106,7 @@ class SignUp extends Component {
            <div style={{ textAlign: 'center' }}>
              <br />
              <label htmlFor="name">
-               <input placeholder="Name" type="text" id="name" name="name" />
+               <input placeholder="Name" type="text" id="name" name="name" onChange={this.customerNameChange} />
              </label>
              <br />
              <label htmlFor="email">

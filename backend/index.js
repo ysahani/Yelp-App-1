@@ -193,6 +193,26 @@ app.post('/updateprofile', (req, res) => {
   });
 });
 
+app.post('/updatecustomer', (req, res) => {
+  const customer = {
+    yelpingSince: req.body.yelpSince, thingsILove: req.body.love, findMeIn: req.body.findIn, blogsite: req.body.weblog, dob: req.body.dob, city: req.body.acity, state: req.body.astate, country: req.body.acountry, nickname: req.body.nname, phone: req.body.aPhone, email: req.body.email, name: req.body.fullname,
+  };
+  db.query(`UPDATE customer_user SET yelpingSince = '${customer.yelpingSince}', thingsILove = '${customer.thingsILove}', findMeIn = '${customer.findMeIn}', blogsite = '${customer.blogsite}', dob = '${customer.dob}', city = '${customer.city}', state = '${customer.state}', country = '${customer.country}', nickname = '${customer.nickname}', phone = '${customer.phone}', email = '${customer.email}', name = '${customer.name}' WHERE email = '${customer.email}'`, (err, result) => {
+    console.log(err);
+    if (err) {
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
+
 // start your server on port 3001
 app.listen(3001);
 console.log('Server Listening on port 3001');

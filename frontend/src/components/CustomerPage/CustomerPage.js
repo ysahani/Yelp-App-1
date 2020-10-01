@@ -19,7 +19,7 @@ export default class CustomerPage extends Component {
         </div>
         <div>
           <ul style={{ listStyle: 'none' }}>
-            <li id="update"><Link to="/updateprofile">Update Your Page</Link></li>
+            <li id="update"><Link to="/updatecustomer">Update Your Page</Link></li>
           </ul>
         </div>
         <div>

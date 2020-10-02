@@ -9,6 +9,8 @@ import UpdateProfile from './RestaurantPage/UpdateProfile';
 import Menu from './RestaurantPage/Menu';
 import Customer from './CustomerPage/CustomerPage';
 import UpdateCustomer from './CustomerPage/UpdateCustomer';
+import RestaurantEvent from './RestaurantPage/RestaurantEvents';
+import AddEvent from './RestaurantPage/AddEvent';
 
 // Create a Main Component
 class Main extends Component {
@@ -31,6 +33,8 @@ class Main extends Component {
         <Route path="/menu" component={Menu} />
         <Route path="/customerpage" component={Customer} />
         <Route path="/updatecustomer" component={UpdateCustomer} />
+        <Route path="/restaurantevents" component={RestaurantEvent} />
+        <Route path="/addevent" component={AddEvent} />
       </div>
     );
   }

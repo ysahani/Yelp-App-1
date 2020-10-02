@@ -19,3 +19,14 @@
     text-align: center;
     margin-left: -35px;
 }
+
+#events {
+    color: #d32323;
+    text-align: center;
+}
+
+#addEvent {
+    position: relative;
+    left: 180px;
+    bottom: 31px
+}

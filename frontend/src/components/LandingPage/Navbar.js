@@ -53,6 +53,7 @@ class Navbar extends Component {
           <div className="container-fluid">
             <ul className="nav navbar-nav">
               <li><Link style={{ color: 'white' }} to="/signup">Signup</Link></li>
+              <li><Link style={{ color: 'white' }} to="/restaurantevents">Events</Link></li>
             </ul>
             <img src={Yelp} alt="" style={{ width: '200px', marginLeft: '450px' }} />
             {navLogin}

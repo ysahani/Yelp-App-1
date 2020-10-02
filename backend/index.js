@@ -81,7 +81,9 @@ app.post('/login', (req, res) => {
         isThere = true;
         console.log('USERs');
         res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
-        res.send({ persona: 'customer' });
+        res.send({
+          cname: result[0].name, email: result[0].email, yelpingSince: result[0].yelpingSince, thingsILove: result[0].thingsILove, findMeIn: result[0].findMeIn, blogsite: result[0].blogsite, dob: result[0].dob, city: result[0].city, state: result[0].state, country: result[0].country, nickname: result[0].nickname, phone: result[0].phone, persona: 'customer',
+        });
         // res.writeHead(200, {
         //   'Content-Type': 'text/plain',
         // });
@@ -180,6 +182,7 @@ app.post('/updateprofile', (req, res) => {
   };
   db.query(`UPDATE restaurant_user SET r_name = '${restaurant.r_name}', location = '${restaurant.location}', timings = '${restaurant.timings}', description = '${restaurant.description}' WHERE email = '${restaurant.email}'`, (err, result) => {
     if (err) {
+      console.log(err);
       res.writeHead(202, {
         'Content-Type': 'application/json',
       });

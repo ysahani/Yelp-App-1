@@ -11,6 +11,17 @@ class LogIn extends Component {
       password: '',
       restaurantName: '',
       location: '',
+      customerName: '',
+      yelpingSince: '',
+      thingsILove: '',
+      findMeIn: '',
+      blogSite: '',
+      dob: '',
+      city: '',
+      state: '',
+      country: '',
+      nickname: '',
+      phone: '',
       // err: true,
     };
   }
@@ -47,16 +58,43 @@ class LogIn extends Component {
       .then((response) => {
         console.log('Status Code : ', response.status);
         if (response.status === 200) {
-          if(response.data.persona && response.data.persona === 'customer') {
-            this.props.history.push('/customerpage');
-          }
           this.setState({
             restaurantName: response.data.rname,
             location: response.data.location,
           });
           const { restaurantName } = this.state;
           const { location } = this.state;
-          this.props.logUserIn(username, restaurantName, location);
+          if (response.data.persona && response.data.persona === 'customer') {
+            this.setState({
+              customerName: response.data.cname,
+              yelpingSince: response.data.yelpingSince,
+              thingsILove: response.data.thingsILove,
+              findMeIn: response.data.findMeIn,
+              blogSite: response.data.blogsite,
+              dob: response.data.dob,
+              city: response.data.city,
+              state: response.data.state,
+              country: response.data.country,
+              nickname: response.data.nickname,
+              phone: response.data.phone,
+            });
+            const { customerName } = this.state;
+            const { yelpingSince } = this.state;
+            const { thingsILove } = this.state;
+            const { findMeIn } = this.state;
+            const { blogSite } = this.state;
+            const { dob } = this.state;
+            const { city } = this.state;
+            const { state } = this.state;
+            const { country } = this.state;
+            const { nickname } = this.state;
+            const { phone } = this.state;
+
+            this.props.loginCustomer(username, customerName, yelpingSince, thingsILove, findMeIn, blogSite, dob, city, state, country, nickname, phone);
+            this.props.history.push('/customerpage');
+          } else {
+            this.props.logUserIn(username, restaurantName, location);
+          }
         } else {
           this.props.dontLogUserIn();
         }
@@ -105,6 +143,23 @@ const mapDispatchToProps = (dispatch) => ({
   logUserIn: (user, name, loc) => {
     dispatch({
       type: 'LOGIN_USER', email: user, rname: name, location: loc,
+    });
+  },
+  loginCustomer: (user, name, yelpingSince, thingsILove, findMeIn, blogSite, dob, city, state, country, nickname, phone) => {
+    dispatch({
+      type: 'LOGIN_CUSTOMER',
+      email: user,
+      cname: name,
+      yelpSince: yelpingSince,
+      love: thingsILove,
+      findMe: findMeIn,
+      weblog: blogSite,
+      dateob: dob,
+      acity: city,
+      astate: state,
+      acountry: country,
+      nname: nickname,
+      aphone: phone,
     });
   },
   dontLogUserIn: () => { dispatch({ type: 'DONT_LOGIN_USER' }); },

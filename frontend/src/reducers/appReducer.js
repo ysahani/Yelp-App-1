@@ -32,6 +32,25 @@ const appReducer = (state = createState, action) => {
       isLoggedIn: true,
     };
   }
+  if (action.type === 'LOGIN_CUSTOMER') {
+    return {
+      ...state,
+      name: action.cname,
+      email: action.email,
+      yelpingSince: action.yelpSince,
+      thingsILove: action.love,
+      findMeIn: action.findMe,
+      blogsite: action.weblog,
+      dob: action.dateob,
+      city: action.acity,
+      state: action.astate,
+      country: action.acountry,
+      nickname: action.nname,
+      phone: action.aphone,
+      isSignedUp: true,
+      isLoggedIn: true,
+    };
+  }
   if (action.type === 'DONT_LOGIN_USER') {
     return {
       ...state,
@@ -52,6 +71,25 @@ const appReducer = (state = createState, action) => {
       location: action.location,
       description: action.description,
       timings: action.timings,
+    };
+  }
+  if (action.type === 'UPDATE_CUSTOMER') {
+    return {
+      ...state,
+      name: action.fullname,
+      email: action.email,
+      yelpingSince: action.yelpSince,
+      thingsILove: action.love,
+      findMeIn: action.findIn,
+      blogsite: action.weblog,
+      dob: action.dob,
+      city: action.acity,
+      state: action.astate,
+      country: action.acountry,
+      nickname: action.nname,
+      phone: action.aPhone,
+      isSignedUp: true,
+      isLoggedIn: true,
     };
   }
   return state;

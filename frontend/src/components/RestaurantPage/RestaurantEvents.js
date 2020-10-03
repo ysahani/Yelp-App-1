@@ -1,11 +1,37 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 
 class RestaurantEvents extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: this.props.rname,
+      res: [],
     };
+  }
+
+  componentDidMount() {
+    const { name } = this.state;
+    const data = {
+      aname: name,
+    };
+
+    axios.post('http://localhost:3001/restaurantevents', data)
+      .then((response) => {
+        console.log('Status Code : ', response.status);
+        if (response.status === 200) {
+          // console.log(response.data);
+          this.setState({
+            res: response.data,
+          });
+          this.state.res.forEach((item) => {
+            console.log(item.name);
+          });
+        } else {
+          console.log('Post error in restaurant events!');
+        }
+      });
   }
 
   submitEvent = () => {
@@ -13,6 +39,25 @@ class RestaurantEvents extends Component {
   }
 
   render() {
+    // const { res } = this.state;
+    const contents = this.state.res.map((item) => (
+      <tr>
+        <td>
+          {item.name}
+          <br />
+          {item.description}
+          <br />
+          {item.time}
+          <br />
+          {item.date}
+          <br />
+          {item.location}
+          <br />
+          {item.hashtags}
+          <br />
+        </td>
+      </tr>
+    ));
     return (
       <div>
         <div id="header">
@@ -28,6 +73,9 @@ class RestaurantEvents extends Component {
             Add Event+
           </button>
         </div>
+        <table>
+          { contents }
+        </table>
       </div>
     );
   }

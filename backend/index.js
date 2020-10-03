@@ -216,6 +216,33 @@ app.post('/updatecustomer', (req, res) => {
   });
 });
 
+app.post('/addevent', (req, res) => {
+  const event = {
+    name: req.body.ename, description: req.body.desc, time: req.body.atime, date: req.body.adate, location: req.body.loc, hashtags: req.body.htag,
+  };
+  const sql = 'INSERT INTO restaurant_events SET ?';
+  const query = db.query(sql, event, (err, result) => {
+    console.log(err);
+    if (err) {
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
+
+app.post('/restaurantevents', (req, res) => {
+  db.query('SELECT * FROM restaurant_events', (err, result) => {
+    console.log(result);
+    res.send(result);
+  });
+});
 // start your server on port 3001
 app.listen(3001);
 console.log('Server Listening on port 3001');

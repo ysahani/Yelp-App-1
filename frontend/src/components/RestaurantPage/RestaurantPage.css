@@ -31,6 +31,6 @@
     bottom: 31px
 }
 
-table {
-    margin-left: 250px;
+table.center {
+    margin-left: 255px;
 }

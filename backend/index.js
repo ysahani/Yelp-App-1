@@ -239,8 +239,43 @@ app.post('/addevent', (req, res) => {
 
 app.post('/restaurantevents', (req, res) => {
   db.query('SELECT * FROM restaurant_events', (err, result) => {
-    console.log(result);
     res.send(result);
+  });
+});
+
+app.post('/customerevents', (req, res) => {
+  db.query('SELECT * FROM restaurant_events ORDER BY date ASC', (err, result) => {
+    res.send(result);
+  });
+});
+
+app.post('/customerevent', (req, res) => {
+  db.query(`SELECT * FROM restaurant_events WHERE name = '${req.body.asearch}'`, (err, result) => {
+    res.send(result[0]);
+  });
+});
+
+app.post('/showRegistered', (req, res) => {
+  db.query(`SELECT event_name FROM customer_events WHERE email = '${req.body.aEmail}'`, (err, result) => {
+    res.send(result);
+  });
+});
+
+app.post('/registerevent', (req, res) => {
+  const register = { event_name: req.body.eName, email: req.body.aEmail };
+  const sql = 'INSERT INTO customer_events SET ?';
+  const query = db.query(sql, register, (err, result) => {
+    if (err) {
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
   });
 });
 // start your server on port 3001

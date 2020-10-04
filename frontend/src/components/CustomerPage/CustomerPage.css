@@ -10,3 +10,9 @@
 .aLine {
     width: 200px;
 }
+
+#registerButton {
+    position: relative;
+    left:800px;
+    bottom:30px
+}

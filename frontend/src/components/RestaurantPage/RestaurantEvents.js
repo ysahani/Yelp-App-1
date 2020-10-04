@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
@@ -38,18 +39,24 @@ class RestaurantEvents extends Component {
     this.props.history.push('/addevent');
   }
 
+  clickLink = (e) => {
+    e.preventDefault();
+    this.props.updateViewvent(e.currentTarget.textContent);
+    this.props.history.push('/restaurantpage');
+  }
+
   render() {
     // const { res } = this.state;
     const contents = this.state.res.map((item) => (
       <tr>
         <td>
-          {item.name}
+          <Link to="/registerevent" onClick={this.clickLink}>{item.name}</Link>
           <br />
           {item.description}
           <br />
           {item.time}
           <br />
-          {item.date}
+          {item.date.substring(0, 10)}
           <br />
           {item.location}
           <br />
@@ -73,9 +80,11 @@ class RestaurantEvents extends Component {
             Add Event+
           </button>
         </div>
-        <table>
-          { contents }
-        </table>
+        <div style={{ textAlign: 'center' }}>
+          <table className="center">
+            { contents }
+          </table>
+        </div>
       </div>
     );
   }
@@ -89,4 +98,12 @@ const mapStateToProps = (state) => ({
   description: state.description,
 });
 
-export default connect(mapStateToProps)(RestaurantEvents);
+const mapDispatchToProps = (dispatch) => ({
+  updateViewvent: (eName) => {
+    dispatch({
+      type: 'UPDATE_VIEWVENT', eventName: eName,
+    });
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RestaurantEvents);

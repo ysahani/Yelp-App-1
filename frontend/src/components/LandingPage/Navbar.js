@@ -54,6 +54,7 @@ class Navbar extends Component {
             <ul className="nav navbar-nav">
               <li><Link style={{ color: 'white' }} to="/signup">Signup</Link></li>
               <li><Link style={{ color: 'white' }} to="/restaurantevents">Events</Link></li>
+              <li><Link style={{ color: 'white' }} to="/customerevents">Customer Events</Link></li>
             </ul>
             <img src={Yelp} alt="" style={{ width: '200px', marginLeft: '450px' }} />
             {navLogin}

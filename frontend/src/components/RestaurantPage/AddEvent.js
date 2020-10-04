@@ -108,7 +108,7 @@ export default class AddEvent extends Component {
           <input id="form-text" name="form-text" type="text" onChange={this.handleLocation} />
           <br />
           <br />
-          <label htmlFor="form-text">Hashtage</label>
+          <label htmlFor="form-text">Hashtags</label>
           <span className="help-block">#Hashtags For Your Event</span>
           <input id="form-text" name="form-text" type="text" onChange={this.handleHashtags} />
           <br />

@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['isSignedUp', 'isLoggedIn', 'email', 'name', 'location', 'description', 'timings', 'eventName', 'eventDesc', 'eventTime', 'eventDate', 'eventLoc', 'eventHashtags', 'yelpingSince', 'thingsILove', 'findMeIn', 'blogsite', 'dob', 'city', 'state', 'country', 'nickname', 'phone'],
+  whitelist: ['isSignedUp', 'isLoggedIn', 'email', 'name', 'location', 'description', 'timings', 'eventName', 'eventDesc', 'eventTime', 'eventDate', 'eventLoc', 'eventHashtags', 'yelpingSince', 'thingsILove', 'findMeIn', 'blogsite', 'dob', 'city', 'state', 'country', 'nickname', 'phone', 'cName'],
 };
 const createState = {
 
@@ -107,6 +107,12 @@ const appReducer = (state = createState, action) => {
     return {
       ...state,
       eventName: action.eventName,
+    };
+  }
+  if (action.type === 'UPDATE_CNAME') {
+    return {
+      ...state,
+      cName: action.cName,
     };
   }
   return state;

@@ -3,22 +3,22 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-class RestaurantEvents extends Component {
+class RegisteredList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: this.props.rname,
+      eventName: this.props.eventName,
       res: [],
     };
   }
 
   componentDidMount() {
-    const { name } = this.state;
+    const { eventName } = this.state;
     const data = {
-      aname: name,
+      eName: eventName,
     };
 
-    axios.post('http://localhost:3001/restaurantevents', data)
+    axios.post('http://localhost:3001/registeredlist', data)
       .then((response) => {
         console.log('Status Code : ', response.status);
         if (response.status === 200) {
@@ -35,33 +35,15 @@ class RestaurantEvents extends Component {
       });
   }
 
-  submitEvent = () => {
-    this.props.history.push('/addevent');
-  }
-
-  clickLink = (e) => {
-    e.preventDefault();
-    this.props.updateViewvent(e.currentTarget.textContent);
-    this.props.history.push('/registeredlist');
+  clickLin = (e) => {
+    this.props.updateCname(e.currentTarget.textContent);
   }
 
   render() {
-    // const { res } = this.state;
     const contents = this.state.res.map((item) => (
       <tr>
         <td>
-          <Link to="/registerevent" onClick={this.clickLink}>{item.name}</Link>
-          <br />
-          {item.description}
-          <br />
-          {item.time}
-          <br />
-          {item.date.substring(0, 10)}
-          <br />
-          {item.location}
-          <br />
-          {item.hashtags}
-          <br />
+          <Link to="/viewcustomer" onClick={this.clickLin}>{item.name}</Link>
         </td>
       </tr>
     ));
@@ -74,11 +56,16 @@ class RestaurantEvents extends Component {
         </div>
         <div id="events">
           <h4>
-            Events
+            Registered Customers
           </h4>
-          <button id="addEvent" onClick={this.submitEvent} type="submit">
-            Add Event+
-          </button>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <br />
+          <h5 style={{ textDecoration: 'underline' }}>
+            Event Name:
+            {' '}
+            {this.props.eventName}
+          </h5>
         </div>
         <div style={{ textAlign: 'center' }}>
           <table className="center">
@@ -93,17 +80,15 @@ class RestaurantEvents extends Component {
 const mapStateToProps = (state) => ({
   rname: state.name,
   location: state.location,
-  email: state.email,
-  timings: state.timings,
-  description: state.description,
+  eventName: state.eventName,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateViewvent: (eName) => {
+  updateCname: (cnam) => {
     dispatch({
-      type: 'UPDATE_VIEWVENT', eventName: eName,
+      type: 'UPDATE_CNAME', cName: cnam,
     });
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RestaurantEvents);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisteredList);

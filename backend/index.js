@@ -266,6 +266,7 @@ app.post('/registerevent', (req, res) => {
   const sql = 'INSERT INTO customer_events SET ?';
   const query = db.query(sql, register, (err, result) => {
     if (err) {
+      console.log(err);
       res.writeHead(202, {
         'Content-Type': 'application/json',
       });
@@ -276,6 +277,20 @@ app.post('/registerevent', (req, res) => {
       });
       res.end('Success!');
     }
+  });
+});
+
+app.post('/registeredlist', (req, res) => {
+  db.query(`SELECT name FROM customer_user t1 INNER JOIN customer_events t2 ON t1.email = t2.email WHERE event_name = '${req.body.eName}'`, (err, result) => {
+    res.send(result);
+  });
+});
+
+app.post('/viewcustomer', (req, res) => {
+  db.query(`SELECT * FROM customer_user WHERE name = '${req.body.cname}'`, (err, result) => {
+    console.log(err);
+    console.log(result);
+    res.send(result[0]);
   });
 });
 // start your server on port 3001

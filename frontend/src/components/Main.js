@@ -15,6 +15,7 @@ import CustomerEvent from './CustomerPage/CustomerEvents';
 import RegisterEvent from './CustomerPage/RegisterEvent';
 import RegisteredList from './RestaurantPage/RegisteredList';
 import ViewCustomer from './RestaurantPage/ViewCustomer';
+import AddMenuItem from './RestaurantPage/AddMenuItem';
 
 // Create a Main Component
 class Main extends Component {
@@ -43,6 +44,7 @@ class Main extends Component {
         <Route path="/registerevent" component={RegisterEvent} />
         <Route path="/registeredlist" component={RegisteredList} />
         <Route path="/viewcustomer" component={ViewCustomer} />
+        <Route path="/addmenuitem" component={AddMenuItem} />
       </div>
     );
   }

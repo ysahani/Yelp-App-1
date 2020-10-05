@@ -293,6 +293,36 @@ app.post('/viewcustomer', (req, res) => {
     res.send(result[0]);
   });
 });
+
+app.post('/addmenuitem', (req, res) => {
+  const menu = {
+    restaurant_name: req.body.rname, dish_name: req.body.mname, ingredients: req.body.mingredients, price: req.body.mprice, category: req.body.mcategory, description: req.body.mdescription,
+  };
+  const sql = 'INSERT INTO restaurant_menu SET ?';
+  const query = db.query(sql, menu, (err, result) => {
+    console.log(err);
+    console.log(result);
+    if (err) {
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
+
+app.post('/menu', (req, res) => {
+  db.query(`SELECT * FROM restaurant_menu WHERE restaurant_name = '${req.body.rname}'`, (err, result) => {
+    console.log(err);
+    console.log(result);
+    res.send(result);
+  });
+});
 // start your server on port 3001
 app.listen(3001);
 console.log('Server Listening on port 3001');

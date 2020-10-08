@@ -323,6 +323,105 @@ app.post('/menu', (req, res) => {
     res.send(result);
   });
 });
+
+app.post('/customerpage', (req, res) => {
+  const arr = new Array();
+  db.query(`SELECT * FROM restaurant_user t1 LEFT JOIN restaurant_menu t2 ON t1.r_name = t2.restaurant_name UNION SELECT * FROM restaurant_user t1 RIGHT JOIN restaurant_menu t2 ON t1.r_name = t2.restaurant_name WHERE r_name = '${req.body.val}' OR location = '${req.body.val}' OR dish_name = '${req.body.val}'`, (err, result) => {
+    console.log(req.body.val);
+    console.log(err);
+    console.log(result[0]);
+    let isThere = false;
+    for (let i = 0; i < result.length; i += 1) {
+      if (result[i].r_name === req.body.val || result[i].location === req.body.val || result[i].dish_name === req.body.val) {
+        isThere = true;
+      }
+
+      if (isThere === true) {
+        if (!arr.includes(result[i].r_name)) {
+          arr.push(result[i].r_name);
+        }
+      }
+      isThere = false;
+    }
+    console.log(arr);
+    res.send(arr);
+  });
+});
+
+app.post('/viewrestaurant', (req, res) => {
+  // console.log(req.body.rsults);
+  const arr = req.body.rsults;
+  const quotedAndCommaSeparated = "'" + arr.join("','") + "'";
+  // console.log(quotedAndCommaSeparated);
+  // const ares = [...req.body.rsults];
+  // const arr = ares.split(',');
+  db.query(`SELECT * FROM restaurant_user WHERE r_name IN (${quotedAndCommaSeparated})`, (err, result) => {
+    console.log(err);
+    console.log(result);
+    if (err) {
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.send(result);
+    }
+    // res.send(result);
+  });
+});
+
+app.post('/restaurantprof', (req, res) => {
+  db.query(`SELECT * FROM restaurant_user WHERE r_name = '${req.body.name}'`, (err, result) => {
+    res.send(result);
+  });
+});
+
+app.post('/makereview', (req, res) => {
+  const review = {
+    customer_email: req.body.customer_email, customer_name: req.body.customer_name, date: req.body.date, rating: req.body.rating, comments: req.body.comment, r_name: req.body.r_name 
+  };
+  const sql = 'INSERT INTO customer_reviews SET ?';
+  const query = db.query(sql, review, (err, result) => {
+    if (err) {
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
+
+app.post('/rprofreviews', (req, res) => {
+  db.query(`SELECT * FROM customer_reviews WHERE r_name = '${req.body.name}'`, (err, result) => {
+    res.send(result);
+  });
+});
+
+app.post('/placeorder', (req, res) => {
+  const order = {
+    items: req.body.items, cName: req.body.cName, rName: req.body.rName, date_time: req.body.date_time,
+  };
+  const sql = 'INSERT INTO customer_orders SET ?';
+  const query = db.query(sql, order, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
 // start your server on port 3001
 app.listen(3001);
 console.log('Server Listening on port 3001');

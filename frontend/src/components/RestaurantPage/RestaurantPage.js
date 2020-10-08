@@ -28,7 +28,7 @@ class RestaurantPage extends Component {
         </div>
         <div id="about">
           <h4 id="aboutName">
-            About Name
+            About
           </h4>
           <h5 className="subtitle">
             <b>Location</b>

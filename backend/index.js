@@ -351,7 +351,7 @@ app.post('/customerpage', (req, res) => {
 app.post('/viewrestaurant', (req, res) => {
   // console.log(req.body.rsults);
   const arr = req.body.rsults;
-  const quotedAndCommaSeparated = "'" + arr.join("','") + "'";
+  const quotedAndCommaSeparated = `'${arr.join("','")}'`;
   // console.log(quotedAndCommaSeparated);
   // const ares = [...req.body.rsults];
   // const arr = ares.split(',');
@@ -378,7 +378,7 @@ app.post('/restaurantprof', (req, res) => {
 
 app.post('/makereview', (req, res) => {
   const review = {
-    customer_email: req.body.customer_email, customer_name: req.body.customer_name, date: req.body.date, rating: req.body.rating, comments: req.body.comment, r_name: req.body.r_name 
+    customer_email: req.body.customer_email, customer_name: req.body.customer_name, date: req.body.date, rating: req.body.rating, comments: req.body.comment, r_name: req.body.r_name,
   };
   const sql = 'INSERT INTO customer_reviews SET ?';
   const query = db.query(sql, review, (err, result) => {
@@ -404,10 +404,92 @@ app.post('/rprofreviews', (req, res) => {
 
 app.post('/placeorder', (req, res) => {
   const order = {
-    items: req.body.items, cName: req.body.cName, rName: req.body.rName, date_time: req.body.date_time,
+    items: req.body.items, cName: req.body.cName, rName: req.body.rName, date_time: req.body.date_time, delivery_option: req.body.delivery_option,
   };
   const sql = 'INSERT INTO customer_orders SET ?';
   const query = db.query(sql, order, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
+
+app.post('/restaurantorders', (req, res) => {
+  db.query(`SELECT * FROM customer_orders WHERE rName = '${req.body.rName}'`, (err, result) => {
+    // console.log(err);
+    // console.log(result);
+    res.send(result);
+  });
+});
+
+app.post('/updateorder', (req, res) => {
+  const order = {
+    items: req.body.items, order_option: req.body.order_option,
+  };
+  db.query(`UPDATE customer_orders SET order_option = '${order.order_option}' WHERE items = '${order.items}'`, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
+
+app.post('/filterorder', (req, res) => {
+  if (req.body.filter === 'Delivered Orders') {
+    db.query(`SELECT * FROM customer_orders WHERE rName = '${req.body.rName}' AND order_option = 'Delivered'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  } else if (req.body.filter === 'New Orders') {
+    db.query(`SELECT * FROM customer_orders WHERE rName = '${req.body.rName}' AND order_option = 'Order Recieved'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  } else if (req.body.filter === 'Cancelled Orders') {
+    db.query(`SELECT * FROM customer_orders WHERE rName = '${req.body.rName}' AND order_option = 'Cancel'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  } else if (req.body.filter === 'All Orders') {
+    db.query(`SELECT * FROM customer_orders WHERE order_option LIKE '%'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  }
+});
+
+app.post('/customerorders', (req, res) => {
+  db.query(`SELECT * FROM customer_orders WHERE cName = '${req.body.cName}'`, (err, result) => {
+    res.send(result);
+  });
+});
+
+app.post('/cancelorder', (req, res) => {
+  const order = {
+    items: req.body.items,
+  };
+  db.query(`UPDATE customer_orders SET order_option = 'Cancel' WHERE items = '${order.items}'`, (err, result) => {
     if (err) {
       console.log(err);
       res.writeHead(202, {

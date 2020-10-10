@@ -9,6 +9,7 @@ class RestaurantTab extends Component {
       rName: this.props.rName,
       res: [],
       orderArr: [],
+      option: 'Delivery',
     };
   }
 
@@ -44,6 +45,7 @@ class RestaurantTab extends Component {
 
   order = (e) => {
     e.preventDefault();
+    const { option } = this.state;
     const arr = [...this.state.orderArr];
     const fullOrder = arr.join(',');
 
@@ -60,6 +62,7 @@ class RestaurantTab extends Component {
       cName: this.props.name,
       rName: this.props.rName,
       date_time: dateVal,
+      delivery_option: option,
     };
 
     axios.post('http://localhost:3001/placeorder', data)
@@ -67,13 +70,21 @@ class RestaurantTab extends Component {
         console.log('Status Code : ', response.status);
         if (response.status === 200) {
           // console.log(response.data);
+          this.props.history.push('/customerorders');
         } else {
           console.log('Post error in placeorder!');
         }
       });
   }
 
+  handleChange = (e) => {
+    this.setState({
+      option: e.target.value,
+    });
+  }
+
   render() {
+    const { option } = this.state;
     const { orderArr } = this.state;
     const order = orderArr.join(',');
     const contents = this.state.res.map((item) => (
@@ -114,6 +125,10 @@ class RestaurantTab extends Component {
             {' '}
             {order}
           </p>
+          <select id="option" onChange={this.handleChange} value={option}>
+            <option value="Delivery">Delivery</option>
+            <option value="Pickup">Pickup</option>
+          </select>
           <button type="submit" onClick={this.order} style={{ backgroundColor: '#d32323', color: 'white' }}>Complete Order</button>
         </div>
       </div>

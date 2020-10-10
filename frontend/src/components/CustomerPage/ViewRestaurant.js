@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -9,10 +10,28 @@ class ViewRestaurant extends Component {
     this.state = {
       results: this.props.results,
       res: [],
+      lat: 0,
+      lon: 0,
     };
   }
 
   componentDidMount() {
+    const cityAndState = 'Hayward, CA';
+    let mapz = fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=+${
+        cityAndState
+      }+&key=AIzaSyDXMfnlQDfBnxLn_2kfR20uDbHWHLbdfNg`,
+    ).then((res) => res.json())
+      .then((data) => data.results[0].geometry.location)
+      .then((location) => {
+        this.setState = {
+          lat: location.lat,
+          lon: location.lng,
+        };
+        return location;
+      });
+    const lat = mapz;
+    console.log(lat);
     const { results } = this.state;
     const data = {
       rsults: results,
@@ -38,6 +57,8 @@ class ViewRestaurant extends Component {
   }
 
   render() {
+    const { lat } = this.state;
+    const { lon } = this.state;
     const contents = this.state.res.map((item) => (
       <div>
         <p><Link to="/restaurantprof" onClick={this.click}>{item.r_name}</Link></p>
@@ -65,6 +86,20 @@ class ViewRestaurant extends Component {
         <div style={{ textAlign: 'center' }}>
           {contents}
         </div>
+        <Map
+          google={this.props.google}
+          zoom={14}
+          initialCenter={
+          {
+            lat: 40,
+            lng: 17,
+          }
+        }
+        >
+          <Marker
+            position={{ lat: { lat }, lng: { lon } }}
+          />
+        </Map>
       </div>
     );
   }
@@ -85,4 +120,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewRestaurant);
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyDXMfnlQDfBnxLn_2kfR20uDbHWHLbdfNg',
+})(connect(mapStateToProps, mapDispatchToProps)(ViewRestaurant));
+
+// export default connect(mapStateToProps, mapDispatchToProps)(ViewRestaurant);
+// export const ConnectedViewRestaurant = connect(mapStateToProps, mapDispatchToProps)(ViewRestaurant)

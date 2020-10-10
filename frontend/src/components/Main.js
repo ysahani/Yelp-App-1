@@ -20,6 +20,8 @@ import ViewRestaurant from './CustomerPage/ViewRestaurant';
 import RestaurantProf from './CustomerPage/RestaurantProf';
 import RestaurantTab from './CustomerPage/RestaurantTab';
 import MakeReview from './CustomerPage/MakeReview';
+import RestaurantOrders from './RestaurantPage/RestaurantOrders';
+import CustomerOrders from './CustomerPage/CustomerOrders';
 
 // Create a Main Component
 class Main extends Component {
@@ -53,6 +55,8 @@ class Main extends Component {
         <Route path="/restaurantprof" component={RestaurantProf} />
         <Route path="/restauranttab" component={RestaurantTab} />
         <Route path="/makereview" component={MakeReview} />
+        <Route path="/restaurantorders" component={RestaurantOrders} />
+        <Route path="/customerorders" component={CustomerOrders} />
       </div>
     );
   }

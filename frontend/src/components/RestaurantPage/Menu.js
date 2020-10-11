@@ -39,11 +39,15 @@ class Menu extends Component {
     this.props.history.push('/addmenuitem');
   }
 
+  clickLin = (e) => {
+    this.props.updateDishName(e.target.innerText);
+  }
+
   render() {
     const contents = this.state.res.map((item) => (
       <tr>
         <td>
-          {item.dish_name}
+          <Link to="/editdish" onClick={this.clickLin}>{item.dish_name}</Link>
         </td>
         <td>
           {item.ingredients}
@@ -101,4 +105,12 @@ const mapStateToProps = (state) => ({
   location: state.location,
 });
 
-export default connect(mapStateToProps)(Menu);
+const mapDispatchToProps = (dispatch) => ({
+  updateDishName: (dnam) => {
+    dispatch({
+      type: 'UPDATE_DNAME', dName: dnam,
+    });
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);

@@ -7,6 +7,8 @@ class LogIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      description: '',
+      timings: '',
       username: '',
       password: '',
       restaurantName: '',
@@ -58,12 +60,12 @@ class LogIn extends Component {
       .then((response) => {
         console.log('Status Code : ', response.status);
         if (response.status === 200) {
-          this.setState({
-            restaurantName: response.data.rname,
-            location: response.data.location,
-          });
-          const { restaurantName } = this.state;
-          const { location } = this.state;
+          // this.setState({
+          //   restaurantName: response.data.rname,
+          //   location: response.data.location,
+          // });
+          // const { restaurantName } = this.state;
+          // const { location } = this.state;
           if (response.data.persona && response.data.persona === 'customer') {
             this.setState({
               customerName: response.data.cname,
@@ -93,7 +95,17 @@ class LogIn extends Component {
             this.props.loginCustomer(username, customerName, yelpingSince, thingsILove, findMeIn, blogSite, dob, city, state, country, nickname, phone);
             this.props.history.push('/customerpage');
           } else {
-            this.props.logUserIn(username, restaurantName, location);
+            this.setState({
+              restaurantName: response.data.r_name,
+              location: response.data.location,
+              description: response.data.description,
+              timings: response.data.timings,
+            });
+            const { restaurantName } = this.state;
+            const { location } = this.state;
+            const { description } = this.state;
+            const { timings } = this.state;
+            this.props.logUserIn(username, restaurantName, location, description, timings);
           }
         } else {
           this.props.dontLogUserIn();
@@ -140,9 +152,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  logUserIn: (user, name, loc) => {
+  logUserIn: (user, name, loc, desc, time) => {
     dispatch({
-      type: 'LOGIN_USER', email: user, rname: name, location: loc,
+      type: 'LOGIN_USER', email: user, rname: name, location: loc, description: desc, timings: time,
     });
   },
   loginCustomer: (user, name, yelpingSince, thingsILove, findMeIn, blogSite, dob, city, state, country, nickname, phone) => {

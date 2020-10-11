@@ -35,7 +35,7 @@ class UpdateCustomer extends Component {
 
   handlefindMeIn = (e) => {
     this.setState({
-      name: e.target.value,
+      findMeIn: e.target.value,
     });
   }
 
@@ -127,6 +127,7 @@ class UpdateCustomer extends Component {
       .then((response) => {
         console.log('Status Code : ', response.status);
         if (response.status === 200) {
+          console.log(findMeIn);
           this.props.updateCustomer(yelpingSince, iLove, findMeIn, blogsite, name, dateob, city, state, country, nickname, emailid, phone);
           this.props.history.push('/customerpage');
         } else {

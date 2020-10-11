@@ -90,25 +90,84 @@ class RestaurantOrders extends Component {
   }
 
   render() {
-    const showItems = (aption, name) => {
-      if (aption === 'Delivery') {
+    const showItems = (aption, name, option) => {
+      if (aption === 'Delivery' && option === 'Order Recieved') {
         return (
           <select id={name} name={name} onChange={this.handleChange}>
-            <option value="Order Recieved">Order Recieved</option>
+            <option value="Order Recieved" selected>Order Recieved</option>
             <option value="Preparing">Preparing</option>
             <option value="On the Way">On the Way</option>
             <option value="Delivered">Delivered</option>
           </select>
         );
+      } if (aption === 'Delivery' && option === 'Preparing') {
+        return (
+          <select id={name} name={name} onChange={this.handleChange}>
+            <option value="Order Recieved">Order Recieved</option>
+            <option value="Preparing" selected>Preparing</option>
+            <option value="On the Way">On the Way</option>
+            <option value="Delivered">Delivered</option>
+          </select>
+        );
+      } if (aption === 'Delivery' && option === 'On the Way') {
+        return (
+          <select id={name} name={name} onChange={this.handleChange}>
+            <option value="Order Recieved">Order Recieved</option>
+            <option value="Preparing">Preparing</option>
+            <option value="On the Way" selected>On the Way</option>
+            <option value="Delivered">Delivered</option>
+          </select>
+        );
+      } if (aption === 'Delivery' && option === 'Delivered') {
+        return (
+          <select id={name} name={name} onChange={this.handleChange}>
+            <option value="Order Recieved">Order Recieved</option>
+            <option value="Preparing">Preparing</option>
+            <option value="On the Way">On the Way</option>
+            <option value="Delivered" selected>Delivered</option>
+          </select>
+        );
+      } if (aption === 'Pickup' && option === 'Order Recieved') {
+        return (
+          <select id={name} name={name} onChange={this.handleChange}>
+            <option value="Order Recieved">Order Recieved</option>
+            <option value="Preparing">Preparing</option>
+            <option value="Pick Up Ready">Pick Up Ready</option>
+            <option value="Picked Up">Picked Up</option>
+          </select>
+        );
+      } if (aption === 'Pickup' && option === 'Preparing') {
+        return (
+          <select id={name} name={name} onChange={this.handleChange}>
+            <option value="Order Recieved">Order Recieved</option>
+            <option value="Preparing" selected>Preparing</option>
+            <option value="Pick Up Ready">Pick Up Ready</option>
+            <option value="Picked Up">Picked Up</option>
+          </select>
+        );
+      } if (aption === 'Pickup' && option === 'Pick Up Ready') {
+        return (
+          <select id={name} name={name} onChange={this.handleChange}>
+            <option value="Order Recieved">Order Recieved</option>
+            <option value="Preparing">Preparing</option>
+            <option value="Pick Up Ready" selected>Pick Up Ready</option>
+            <option value="Picked Up">Picked Up</option>
+          </select>
+        );
+      } if (aption === 'Pickup' && option === 'Picked Up') {
+        return (
+          <select id={name} name={name} onChange={this.handleChange}>
+            <option value="Order Recieved">Order Recieved</option>
+            <option value="Preparing">Preparing</option>
+            <option value="Pick Up Ready">Pick Up Ready</option>
+            <option value="Picked Up" selected>Picked Up</option>
+          </select>
+        );
+      } if (aption === 'Pickup' && option === 'Cancel') {
+        return (
+          <p>Cancelled</p>
+        );
       }
-      return (
-        <select id={name} name={name} onChange={this.handleChange}>
-          <option value="Order Recieved">Order Recieved</option>
-          <option value="Preparing">Preparing</option>
-          <option value="Pick Up Ready">Pick Up Ready</option>
-          <option value="Picked Up">Picked Up</option>
-        </select>
-      );
     };
 
     const contents = this.state.res.map((item) => (
@@ -123,7 +182,7 @@ class RestaurantOrders extends Component {
           {item.items}
         </td>
         <td id={item.items}>
-          {showItems(item.delivery_option, item.items)}
+          {showItems(item.delivery_option, item.items, item.order_option)}
         </td>
       </tr>
     ));

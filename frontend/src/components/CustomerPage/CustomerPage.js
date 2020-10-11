@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ImageUploader from 'react-images-upload';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -10,7 +11,75 @@ class CustomerPage extends Component {
     super(props);
     this.state = {
       res: [],
+      pictures: [],
+      url: '',
     };
+    this.onDrop = this.onDrop.bind(this);
+    this.uploadImages = this.uploadImages.bind(this);
+  }
+
+  componentDidMount() {
+    const data = {
+      email: this.props.email,
+    };
+    axios.post('http://localhost:3001/getcustomerurl', data)
+      .then((response) => {
+        console.log('Status Code : ', response.status);
+        console.log(response.data);
+        if (response.status === 200) {
+          this.setState({
+            url: response.data,
+          });
+          const { url } = this.state;
+          console.log('asdf');
+          this.props.updateURL(response.data[0].url);
+          console.log(`"${response.data[0].url}"`);
+          console.log('Post success in customerurl!');
+        } else {
+          console.log('Post error in customerurl!');
+        }
+      });
+  }
+
+  onDrop(picture) {
+    this.setState({
+      pictures: this.state.pictures.concat(picture),
+    });
+  }
+
+  uploadImages() {
+    console.log(this.state.pictures);
+    const uploadPromises = this.state.pictures.map((image) => {
+      const data = new FormData();
+      data.append('image', image, image.name);
+      return axios.post('http://localhost:3001/uploadImage', data);
+    });
+    axios.all(uploadPromises)
+      .then((results) => {
+        console.log('server response: ');
+        const url = JSON.stringify(results[0].data.downloadUrl);
+        this.props.updateURL(results[0].data.downloadUrl);
+        console.log(url);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    const data = {
+      anEmail: this.props.email,
+      url: this.props.url,
+    };
+    this.setState({
+      url: this.props.url,
+    });
+    axios.post('http://localhost:3001/customerurl', data)
+      .then((response) => {
+        console.log('Status Code : ', response.status);
+        if (response.status === 200) {
+          console.log('Post success in customerurl!');
+        } else {
+          console.log('Post error in customerurl!');
+        }
+      });
   }
 
   search = (e) => {
@@ -36,6 +105,7 @@ class CustomerPage extends Component {
   }
 
   render() {
+    const url = this.props.url;
     return (
       <div>
         <div style={{ textAlign: 'center' }}>
@@ -120,6 +190,17 @@ class CustomerPage extends Component {
             {this.props.phone}
           </p>
         </div>
+        <img style={{position: 'relative', bottom: '500px', left: '20px'}} src={url} alt="" />
+        <ImageUploader
+          withPreview
+          withIcon
+          buttonText="Choose images"
+          onChange={this.onDrop}
+          imgExtension={['.jpg', '.gif', '.png']}
+          maxFileSize={5242880}
+          style={{position: 'relative', bottom: '500px', right: '80px', width: '400px' }}
+        />
+        <button style={{ position: 'relative', bottom: '500px', left: '60px' }} onClick={this.uploadImages} type="submit">Upload Image</button>
       </div>
     );
   }
@@ -138,12 +219,18 @@ const mapStateToProps = (state) => ({
   country: state.country,
   nickname: state.nickname,
   phone: state.phone,
+  url: state.url,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   updateResults: (results) => {
     dispatch({
       type: 'UPDATE_RESULTS', sResults: results,
+    });
+  },
+  updateURL: (url) => {
+    dispatch({
+      type: 'UPDATE_URL', aurl: url,
     });
   },
 });

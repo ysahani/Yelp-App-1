@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Reviews.css';
@@ -7,16 +8,58 @@ class Reviews extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      rname: this.props.rname,
+      res: [],
     };
   }
 
+  componentDidMount() {
+    const { rname } = this.state;
+    const data = {
+      r_name: rname,
+    };
+    axios.post('http://localhost:3001/reviews', data)
+      .then((response) => {
+        console.log('Status Code : ', response.status);
+        if (response.status === 200) {
+          this.setState({
+            res: response.data,
+          });
+          console.log('Post success in reviews!');
+        } else {
+          console.log('Post error in reviews!');
+        }
+      });
+  }
+
   render() {
+    const contents = this.state.res.map((item) => (
+      <tr>
+        <td>
+          {item.customer_name}
+        </td>
+        <td>
+          {item.date}
+        </td>
+        <td>
+          {item.rating}
+        </td>
+        <td>
+          {item.comments}
+        </td>
+      </tr>
+    ));
     return (
       <div>
         <div id="header">
           <h1>{this.props.rname}</h1>
           <h2>{this.props.location}</h2>
           <hr id="line" />
+        </div>
+        <div id="events">
+          <h4>
+            Menu
+          </h4>
         </div>
         <div>
           <ul style={{ listStyle: 'none' }}>
@@ -26,22 +69,7 @@ class Reviews extends Component {
           </ul>
         </div>
         <table>
-          <tr>
-            <th>Name</th>
-            <th>Reviews</th>
-          </tr>
-          <tr>
-            <td>Michael Jordan</td>
-            <td>The food was amazing! would definitely come back for even more! I loved every single thing about it.</td>
-          </tr>
-          <tr>
-            <td>Klay Thompson</td>
-            <td>The food was great, but the service could have been better.  The waiter forgot my ketchup!</td>
-          </tr>
-          <tr>
-            <td>Bill Gates</td>
-            <td>This place was terribly awful.  The food was bland, and the service was super slow. 0/10 for me!</td>
-          </tr>
+          {contents}
         </table>
       </div>
     );

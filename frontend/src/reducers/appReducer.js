@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['isSignedUp', 'isLoggedIn', 'email', 'name', 'location', 'description', 'timings', 'eventName', 'eventDesc', 'eventTime', 'eventDate', 'eventLoc', 'eventHashtags', 'yelpingSince', 'thingsILove', 'findMeIn', 'blogsite', 'dob', 'city', 'state', 'country', 'nickname', 'phone', 'cName', 'results', 'rName'],
+  whitelist: ['isSignedUp', 'isLoggedIn', 'email', 'name', 'location', 'description', 'timings', 'eventName', 'eventDesc', 'eventTime', 'eventDate', 'eventLoc', 'eventHashtags', 'yelpingSince', 'thingsILove', 'findMeIn', 'blogsite', 'dob', 'city', 'state', 'country', 'nickname', 'phone', 'cName', 'results', 'rName', 'dName', 'url'],
 };
 const createState = {
 
@@ -30,6 +30,8 @@ const appReducer = (state = createState, action) => {
       email: action.email,
       isSignedUp: true,
       isLoggedIn: true,
+      description: action.description,
+      timings: action.timings,
     };
   }
   if (action.type === 'LOGIN_CUSTOMER') {
@@ -125,6 +127,18 @@ const appReducer = (state = createState, action) => {
     return {
       ...state,
       rName: action.rName,
+    };
+  }
+  if (action.type === 'UPDATE_DNAME') {
+    return {
+      ...state,
+      dName: action.dName,
+    };
+  }
+  if (action.type === 'UPDATE_URL') {
+    return {
+      ...state,
+      url: action.aurl,
     };
   }
   return state;

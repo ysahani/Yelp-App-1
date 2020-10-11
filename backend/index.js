@@ -19,6 +19,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const ImageController = require('./ImageController');
 
 app.set('view engine', 'ejs');
 
@@ -65,10 +66,12 @@ app.post('/login', (req, res) => {
 
   db.query(`SELECT * FROM restaurant_user WHERE email = '${req.body.user}' AND password = '${req.body.pass}'`, (err, result) => {
     if (result.length > 0) {
-      console.log('RESULT');
+      console.log(result);
       isThere = true;
       res.cookie('cookie', 'admin', { maxAge: 900000, httpOnly: false, path: '/' });
-      res.send({ rname: result[0].r_name, location: result[0].location });
+      res.send({
+        r_name: result[0].r_name, location: result[0].location, description: result[0].description, timings: result[0].timings 
+      });
       // res.writeHead(200, {
       //   'Content-Type': 'text/plain',
       // });
@@ -502,6 +505,73 @@ app.post('/cancelorder', (req, res) => {
       });
       res.end('Success!');
     }
+  });
+});
+
+app.post('/editdish', (req, res) => {
+  db.query(`SELECT * FROM restaurant_menu WHERE restaurant_name = '${req.body.restaurant_name}' AND dish_name = '${req.body.dish_name}'`, (err, result) => {
+    console.log(err);
+    console.log(result);
+    res.send(result);
+  });
+});
+
+app.post('/updatedish', (req, res) => {
+  const customer = {
+    dish_name: req.body.dname, ingredients: req.body.ing, price: req.body.prce, category: req.body.cat, description: req.body.desc,
+  };
+  db.query(`UPDATE restaurant_menu SET ingredients = '${customer.ingredients}', price = '${customer.price}', category = '${customer.category}', description = '${customer.description}' WHERE dish_name = '${customer.dish_name}'`, (err, result) => {
+    console.log(err);
+    if (err) {
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
+
+app.post('/reviews', (req, res) => {
+  db.query(`SELECT * FROM customer_reviews WHERE r_name = '${req.body.r_name}'`, (err, result) => {
+    console.log(err);
+    console.log(result);
+    res.send(result);
+  });
+});
+
+app.post('/uploadImage', ImageController.uploadImageToS3);
+
+app.post('/customerurl', (req, res) => {
+  console.log(req.body);
+  const url = {
+    email: req.body.anEmail, url: req.body.url,
+  };
+  db.query(`UPDATE customer_user SET url = '${url.url}' WHERE email = '${url.email}'`, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
+
+app.post('/getcustomerurl', (req, res) => {
+  db.query(`SELECT url FROM customer_user WHERE email = '${req.body.email}'`, (err, result) => {
+    console.log(err);
+    console.log(result);
+    res.send(result);
   });
 });
 // start your server on port 3001

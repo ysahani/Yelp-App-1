@@ -56,6 +56,8 @@ class RestaurantTab extends Component {
       (`0${date.getUTCHours()}`).slice(-2)}:${
       (`0${date.getUTCMinutes()}`).slice(-2)}:${
       (`0${date.getUTCSeconds()}`).slice(-2)}`;
+    
+    const datetime = `${date.getUTCMonth()}/${date.getUTCDay()}/${date.getUTCFullYear()} ${date.getUTCHours()}:${date.getUTCMinutes()}`;
 
     const data = {
       items: fullOrder,
@@ -63,6 +65,7 @@ class RestaurantTab extends Component {
       rName: this.props.rName,
       date_time: dateVal,
       delivery_option: option,
+      real_datetime: datetime,
     };
 
     axios.post('http://localhost:3001/placeorder', data)
@@ -119,7 +122,7 @@ class RestaurantTab extends Component {
         <div style={{ position: 'relative', left: '400px' }}>
           {contents}
         </div>
-        <div style={{ position: 'relative', left: '770px', bottom: '333px' }}>
+        <div style={{ position: 'relative', left: '770px', bottom: '150px' }}>
           <p>
             Your Order:
             {' '}
@@ -129,7 +132,7 @@ class RestaurantTab extends Component {
             <option value="Delivery">Delivery</option>
             <option value="Pickup">Pickup</option>
           </select>
-          <button type="submit" onClick={this.order} style={{ backgroundColor: '#d32323', color: 'white' }}>Complete Order</button>
+          <button type="submit" onClick={this.order} style={{ backgroundColor: '#d32323', color: 'white', marginLeft:'1px' }}>Complete Order</button>
         </div>
       </div>
     );

@@ -176,7 +176,7 @@ class RestaurantOrders extends Component {
           <Link to="/viewcustomer" onClick={this.clickLin}>{item.cName}</Link>
         </td>
         <td>
-          {item.date_time}
+          {item.real_datetime}
         </td>
         <td>
           {item.items}
@@ -209,7 +209,7 @@ class RestaurantOrders extends Component {
               <option value="Cancelled Orders">Cancelled Orders</option>
             </select>
           </label>
-          <table className="center">
+          <table style={{ position: 'relative', left: '450px' }}>
             { contents }
           </table>
         </div>

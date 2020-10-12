@@ -121,7 +121,10 @@ class RestaurantProf extends Component {
           </h4>
         </div>
         <div style={{ textAlign: 'center' }}>
-          <table className="center">
+          <table style={{
+            backgroundColor: '#D2691E', color: 'white', position: 'relative', left: '500px',
+          }}
+          >
             <tr>
               <th>Name</th>
               <th>Date</th>
@@ -140,6 +143,13 @@ class RestaurantProf extends Component {
           <button type="submit" onClick={this.order}>Order Now</button>
           <button type="submit" onClick={this.review} style={{ marginLeft: '50px' }}>Place a Review</button>
         </div>
+        <img
+          style={{
+            position: 'relative', bottom: '440px', right: '-20px', width: '300px', height: '200px', border: 'solid',
+          }}
+          src="https://yelppictures.s3-us-west-1.amazonaws.com/SAJJ_San_Francisco1.jpg"
+          alt=""
+        />
       </div>
     );
   }

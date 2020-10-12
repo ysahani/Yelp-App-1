@@ -61,6 +61,9 @@ class Menu extends Component {
         <td>
           {item.description}
         </td>
+        <td>
+          <img src={item.url} alt="" style={{ width: '80px', height: '100px' }} />
+        </td>
       </tr>
     ));
     return (
@@ -83,14 +86,19 @@ class Menu extends Component {
             <li><Link to="/reviewspage">Reviews</Link></li>
           </ul>
         </div>
-        <div style={{ textAlign: 'center' }}>
-          <table className="center">
+        <div>
+          <table
+            style={{
+              backgroundColor: '#D2691E', color: 'white', position: 'relative', left: '340px',
+            }}
+          >
             <tr>
               <th>Dish name</th>
               <th>Ingredients</th>
               <th>Price</th>
               <th>Category</th>
               <th>Description</th>
+              <th>Picture</th>
             </tr>
             { contents }
           </table>

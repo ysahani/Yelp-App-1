@@ -20,6 +20,9 @@ class Navbar extends Component {
   render() {
     // if Cookie is set render Logout Button
     let navLogin = null;
+    let contents = null;
+    let other = null;
+    let home = null;
     if (this.props.isLoggedIn === true) {
       console.log('Able to read cookie');
       navLogin = (
@@ -47,17 +50,37 @@ class Navbar extends Component {
         </ul>
       );
     }
+    if (this.props.persona === 'Customer') {
+      contents = (
+        <li><Link style={{ color: 'white' }} to="/customerevents">Customer Events</Link></li>
+      );
+      other = (
+        <li><Link style={{ color: 'white' }} to="/customerorders">Customer Orders</Link></li>
+      );
+      home = (
+        <li><Link style={{ color: 'white' }} to="/customerpage">Home</Link></li>
+      );
+    } else if (this.props.persona === 'Restaurant') {
+      contents = (
+        <li><Link style={{ color: 'white' }} to="/restaurantevents">Restaurant Events</Link></li>
+      );
+      other = (
+        <li><Link style={{ color: 'white' }} to="/restaurantorders">Restaurant Orders</Link></li>
+      );
+      home = (
+        <li><Link style={{ color: 'white' }} to="/restaurantpage">Home</Link></li>
+      );
+    }
     return (
       <div>
-        <nav className="navbar navbar-default" style={{ backgroundColor: '#d32323' }}>
+        <nav className="navbar navbar-default" style={{ backgroundColor: '#d32323', textAlign: 'center' }}>
           <div className="container-fluid">
             <ul className="nav navbar-nav">
               <li><Link style={{ color: 'white' }} to="/signup">Signup</Link></li>
-              <li><Link style={{ color: 'white' }} to="/restaurantevents">Events</Link></li>
-              <li><Link style={{ color: 'white' }} to="/customerevents">Customer Events</Link></li>
-              <li><Link style={{ color: 'white' }} to="/restaurantorders">Restaurant Orders</Link></li>
+              {contents}
+              {other}
+              {home}
             </ul>
-            <img src={Yelp} alt="" style={{ width: '200px', marginLeft: '240px' }} />
             {navLogin}
           </div>
         </nav>
@@ -68,6 +91,9 @@ class Navbar extends Component {
 
 const mapStateToProps = (state) => ({
   isLoggedIn: state.isLoggedIn,
+  yelpingSince: state.yelpingSince,
+  location: state.location,
+  persona: state.persona,
 });
 
 const mapDispatchToProps = (dispatch) => ({

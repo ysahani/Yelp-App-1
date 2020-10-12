@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import Yelp from '../../download.png';
 
 class SignUp extends Component {
   constructor(props) {
@@ -146,6 +147,7 @@ class SignUp extends Component {
        }
        return (
          <div style={{ textAlign: 'center' }}>
+           <img src={Yelp} alt="" style={{ width: '100px' }} />
            <h2 style={{ color: '#d32323' }}>Sign Up for Yelp</h2>
            <br />
            <label htmlFor="persona">

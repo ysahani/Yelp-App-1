@@ -111,6 +111,14 @@ class CustomerPage extends Component {
         <div style={{ textAlign: 'center' }}>
           <input placeholder="Search for Food.." id="searchh" />
           <button type="submit" onClick={this.search}>Search</button>
+          <label>
+             <select id="persona">
+               <option value="Curbside Pick Up">Curbside Pick Up</option>
+               <option value="Dine in">Dine In</option>
+               <option value="Yelp Delivery">Yelp Delivery</option>
+               <option value="Location">Location</option>
+             </select>
+           </label>
         </div>
         <div id="header">
           <h1>{this.props.name}</h1>

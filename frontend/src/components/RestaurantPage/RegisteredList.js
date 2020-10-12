@@ -68,7 +68,7 @@ class RegisteredList extends Component {
           </h5>
         </div>
         <div style={{ textAlign: 'center' }}>
-          <table className="center">
+          <table style= {{ position: 'relative', left: '590px' }}>
             { contents }
           </table>
         </div>

@@ -88,16 +88,16 @@ class ViewRestaurant extends Component {
         </div>
         <Map
           google={this.props.google}
-          zoom={14}
+          zoom={7}
           initialCenter={
           {
-            lat: 40,
-            lng: 17,
+            lat: 36,
+            lng: -122,
           }
         }
         >
           <Marker
-            position={{ lat: { lat }, lng: { lon } }}
+            position={{ lat: 37.6688, lng: -122.0810 }}
           />
         </Map>
       </div>

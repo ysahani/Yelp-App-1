@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ImageUploader from 'react-images-upload';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './RestaurantPage.css';
@@ -47,6 +48,19 @@ class RestaurantPage extends Component {
             <p>{this.props.timings}</p>
           </h5>
         </div>
+        <div style={{ width: '40px', height: '20px' }}>
+        <img style={{ position: 'relative', bottom: '240px', left: '950px', width: '300px', height: '200px', border: 'solid' }} src="https://yelppictures.s3-us-west-1.amazonaws.com/SAJJ_San_Francisco1.jpg" alt="" />
+        </div>
+        <ImageUploader
+          withPreview
+          withIcon
+          buttonText="Choose images"
+          onChange={this.onDrop}
+          imgExtension={['.jpg', '.gif', '.png']}
+          maxFileSize={5242880}
+          style={{position: 'relative', bottom: '60px', left: '900px', width: '400px', border: 'solid' }}
+        />
+        <button style={{ position: 'relative', bottom: '60px', left: '1050px' }} onClick={this.uploadImages} type="submit">Upload Image</button>
       </div>
     );
   }

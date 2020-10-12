@@ -407,7 +407,7 @@ app.post('/rprofreviews', (req, res) => {
 
 app.post('/placeorder', (req, res) => {
   const order = {
-    items: req.body.items, cName: req.body.cName, rName: req.body.rName, date_time: req.body.date_time, delivery_option: req.body.delivery_option,
+    items: req.body.items, cName: req.body.cName, rName: req.body.rName, date_time: req.body.date_time, delivery_option: req.body.delivery_option, real_datetime: req.body.real_datetime, order_option: 'Order Recieved'
   };
   const sql = 'INSERT INTO customer_orders SET ?';
   const query = db.query(sql, order, (err, result) => {
@@ -462,7 +462,7 @@ app.post('/filterorder', (req, res) => {
       res.send(result);
     });
   } else if (req.body.filter === 'New Orders') {
-    db.query(`SELECT * FROM customer_orders WHERE rName = '${req.body.rName}' AND order_option = 'Order Recieved'`, (err, result) => {
+    db.query(`SELECT * FROM customer_orders WHERE rName = '${req.body.rName}' AND order_option = 'Order Recieved' ORDER BY 'items'`, (err, result) => {
       console.log(err);
       console.log(result);
       res.send(result);
@@ -568,7 +568,76 @@ app.post('/customerurl', (req, res) => {
 });
 
 app.post('/getcustomerurl', (req, res) => {
+  console.log('EMAIL');
+  console.log(req.body.email);
   db.query(`SELECT url FROM customer_user WHERE email = '${req.body.email}'`, (err, result) => {
+    console.log(err);
+    console.log(result);
+    res.send(result);
+  });
+});
+
+app.post('/dishurl', (req, res) => {
+  console.log(req.body);
+  db.query(`UPDATE restaurant_menu SET url = '${req.body.url}' WHERE dish_name = '${req.body.dish_namez}'`, (err, result) => {
+    console.log(result);
+    if (err) {
+      console.log(err);
+      res.writeHead(202, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Unsuccess!');
+    } else {
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+      });
+      res.end('Success!');
+    }
+  });
+});
+
+app.post('/filtcustomerorder', (req, res) => {
+  if (req.body.filter === 'Order Recieved') {
+    db.query(`SELECT * FROM customer_orders WHERE cName = '${req.body.cName}' AND order_option = 'Order Recieved'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  } else if (req.body.filter === 'Preparing') {
+    db.query(`SELECT * FROM customer_orders WHERE cName = '${req.body.cName}' AND order_option = 'Preparing'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  } else if (req.body.filter === 'On the Way') {
+    db.query(`SELECT * FROM customer_orders WHERE cName = '${req.body.cName}' AND order_option = 'On the Way'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  } else if (req.body.filter === 'Delivered') {
+    db.query(`SELECT * FROM customer_orders WHERE cName = '${req.body.cName}' AND order_option = 'Delivered'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  } else if (req.body.filter === 'Pick Up Ready') {
+    db.query(`SELECT * FROM customer_orders WHERE cName = '${req.body.cName}' AND order_option = 'Pick Up Ready'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  } else if (req.body.filter === 'Picked Up') {
+    db.query(`SELECT * FROM customer_orders WHERE cName = '${req.body.cName}' AND order_option = 'Picked Up'`, (err, result) => {
+      console.log(err);
+      console.log(result);
+      res.send(result);
+    });
+  }
+});
+
+app.post('/getcustomeremail', (req, res) => {
+  db.query(`SELECT email FROM customer_user WHERE name = '${req.body.cname}'`, (err, result) => {
     console.log(err);
     console.log(result);
     res.send(result);

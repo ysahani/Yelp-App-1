@@ -143,7 +143,10 @@ class CustomerEvents extends Component {
           </h4>
         </div>
         <div style={{ textAlign: 'center' }}>
-          <table className="center">
+          <table style={{
+            backgroundColor: '#D2691E', color: 'white', position: 'relative', left: '550px',
+          }}
+          >
             { contents }
           </table>
         </div>
@@ -154,7 +157,10 @@ class CustomerEvents extends Component {
             Registered Events
           </h4>
         </div>
-        <table className="center">
+        <table style={{
+          backgroundColor: '#D2691E', color: 'white', position: 'relative', left: '550px',
+        }}
+        >
           { viewreg }
         </table>
       </div>

@@ -50,6 +50,29 @@ class CustomerOrders extends Component {
       });
   }
 
+  handleFilter = (e) => {
+    e.preventDefault();
+    const { name } = this.state;
+    const val = e.currentTarget.value;
+    console.log(val);
+    const data = {
+      cName: name,
+      filter: val,
+    };
+    axios.post('http://localhost:3001/filtcustomerorder', data)
+      .then((response) => {
+        console.log('Status Code : ', response.status);
+        if (response.status === 200) {
+          this.setState({
+            res: response.data,
+          });
+          console.log('Post success in restaurant orders!');
+        } else {
+          console.log('Post error in restaurant orders!');
+        }
+      });
+  }
+
   render() {
     const contents = this.state.res.map((item) => (
       <tr>
@@ -57,10 +80,13 @@ class CustomerOrders extends Component {
           {item.items}
         </td>
         <td>
+          {item.real_datetime}
+        </td>
+        <td>
           {item.order_option}
         </td>
         <td>
-          <button id={item.items} type="submit" onClick={this.cancel}>Cancel Order</button>
+          <button id={item.items} type="submit" onClick={this.cancel} style={{ backgroundColor: 'red' }}>Cancel Order</button>
         </td>
       </tr>
     ));
@@ -86,13 +112,18 @@ class CustomerOrders extends Component {
           <label htmlFor="filterorders">
             Filter Orders:
             <select onChange={this.handleFilter}>
-              <option value="All Orders">All Orders</option>
-              <option value="New Orders">New Orders</option>
-              <option value="Delivered Orders">Delivered Orders</option>
-              <option value="Cancelled Orders">Cancelled Orders</option>
+              <option value="Order Recieved">Order Recieved</option>
+              <option value="Preparing">Preparing</option>
+              <option value="On the Way">On the Way</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Pick Up Ready">Pick Up Ready</option>
+              <option value="Picked Up">Picked Up</option>
             </select>
           </label>
-          <table className="center">
+          <table style={{
+            backgroundColor: '#D2691E', color: 'white', position: 'relative', left: '450px',
+          }}
+          >
             { contents }
           </table>
         </div>

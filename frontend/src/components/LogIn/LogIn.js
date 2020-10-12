@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
+import Yelp from '../../download.png';
 
 class LogIn extends Component {
   constructor(props) {
@@ -91,8 +92,9 @@ class LogIn extends Component {
             const { country } = this.state;
             const { nickname } = this.state;
             const { phone } = this.state;
+            const persona = 'Customer';
 
-            this.props.loginCustomer(username, customerName, yelpingSince, thingsILove, findMeIn, blogSite, dob, city, state, country, nickname, phone);
+            this.props.loginCustomer(username, customerName, yelpingSince, thingsILove, findMeIn, blogSite, dob, city, state, country, nickname, phone, persona);
             this.props.history.push('/customerpage');
           } else {
             this.setState({
@@ -105,7 +107,8 @@ class LogIn extends Component {
             const { location } = this.state;
             const { description } = this.state;
             const { timings } = this.state;
-            this.props.logUserIn(username, restaurantName, location, description, timings);
+            const persona = 'Restaurant';
+            this.props.logUserIn(username, restaurantName, location, description, timings, persona);
           }
         } else {
           this.props.dontLogUserIn();
@@ -128,6 +131,7 @@ class LogIn extends Component {
     return (
       <div style={{ textAlign: 'center' }}>
         { redirectVar }
+        <img src={Yelp} alt="" style={{ width: '100px' }} />
         <h2 style={{ color: '#d32323' }}>Log in to Yelp</h2>
         <br />
         <form>
@@ -152,12 +156,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  logUserIn: (user, name, loc, desc, time) => {
+  logUserIn: (user, name, loc, desc, time, pers) => {
     dispatch({
-      type: 'LOGIN_USER', email: user, rname: name, location: loc, description: desc, timings: time,
+      type: 'LOGIN_USER', email: user, rname: name, location: loc, description: desc, timings: time, persona: pers,
     });
   },
-  loginCustomer: (user, name, yelpingSince, thingsILove, findMeIn, blogSite, dob, city, state, country, nickname, phone) => {
+  loginCustomer: (user, name, yelpingSince, thingsILove, findMeIn, blogSite, dob, city, state, country, nickname, phone, pers) => {
     dispatch({
       type: 'LOGIN_CUSTOMER',
       email: user,
@@ -172,6 +176,7 @@ const mapDispatchToProps = (dispatch) => ({
       acountry: country,
       nname: nickname,
       aphone: phone,
+      persona: pers,
     });
   },
   dontLogUserIn: () => { dispatch({ type: 'DONT_LOGIN_USER' }); },

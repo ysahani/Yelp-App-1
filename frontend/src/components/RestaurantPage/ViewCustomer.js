@@ -13,9 +13,20 @@ class ViewCustomer extends Component {
 
   componentDidMount() {
     const { cName } = this.state;
-    const data = {
+    let data = {
       cname: cName,
     };
+
+    axios.post('http://localhost:3001/getcustomeremail', data)
+      .then((response) => {
+        console.log('Status Code : ', response.status);
+        if (response.status === 200) {
+          console.log(response.data[0].email);
+          this.props.updateCemail(response.data[0].email);
+        } else {
+          console.log('Post error in restaurant events!');
+        }
+      });
 
     axios.post('http://localhost:3001/viewcustomer', data)
       .then((response) => {
@@ -29,10 +40,28 @@ class ViewCustomer extends Component {
           console.log('Post error in restaurant events!');
         }
       });
+    const { cEmail } = this.props;
+    data = {
+      email: cEmail,
+    };
+    console.log('DSAF');
+    console.log(cEmail);
+    axios.post('http://localhost:3001/getcustomerurl', data)
+      .then((response) => {
+        console.log('Status Code : ', response.status);
+        if (response.status === 200) {
+          console.log(response.data);
+          this.props.updateURL(response.data[0].url);
+          console.log(this.state.res.yelpingSince);
+        } else {
+          console.log('Post error in restaurant events!');
+        }
+      });
   }
 
   render() {
     const { res } = this.state;
+    const { url } = this.props;
     return (
       <div>
         <div id="header">
@@ -103,6 +132,7 @@ class ViewCustomer extends Component {
             {res.phone}
           </p>
         </div>
+        <img src={url} alt="" style={{ position: 'relative', bottom: '470px', left: '20px', border: 'solid' }} />
       </div>
     );
   }
@@ -112,6 +142,21 @@ const mapStateToProps = (state) => ({
   rname: state.name,
   location: state.location,
   cname: state.cName,
+  url: state.url,
+  cEmail: state.cEmail,
 });
 
-export default connect(mapStateToProps)(ViewCustomer);
+const mapDispatchToProps = (dispatch) => ({
+  updateURL: (url) => {
+    dispatch({
+      type: 'UPDATE_URL', aurl: url,
+    });
+  },
+  updateCemail: (email) => {
+    dispatch({
+      type: 'UPDATE_CEMAIL', cEmail: email,
+    });
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewCustomer);

@@ -50,7 +50,7 @@ class RegisterEvent extends Component {
           </h4>
         </div>
         <button id="registerButton" type="submit" onClick={this.register}>Register for Event+</button>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', border: 'solid', borderWidth: '40px' }}>
           <br />
           <p>{this.props.eventName}</p>
           <br />

@@ -94,7 +94,7 @@ class AddMenuItem extends Component {
             <br />
             <br />
             <label htmlFor="form-text">Description</label>
-            <span className="help-block">Date of Dish</span>
+            <span className="help-block">Description of Dish</span>
             <input id="form-text" name="form-text" type="text" onChange={this.handleDescription} />
             <br />
             <br />

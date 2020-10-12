@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ImageUploader from 'react-images-upload';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -11,7 +12,10 @@ class EditDish extends Component {
       price: '',
       category: '',
       description: '',
+      pictures: [],
     };
+    this.onDrop = this.onDrop.bind(this);
+    this.uploadImages = this.uploadImages.bind(this);
   }
 
   componentDidMount() {
@@ -36,6 +40,12 @@ class EditDish extends Component {
           console.log('Post error in edit dish!');
         }
       });
+  }
+
+  onDrop(picture) {
+    this.setState({
+      pictures: this.state.pictures.concat(picture),
+    });
   }
 
   handleDishname = (e) => {
@@ -93,6 +103,41 @@ class EditDish extends Component {
       });
   }
 
+  uploadImages() {
+    const { dish_name } = this.state;
+    console.log(this.state.pictures);
+    const uploadPromises = this.state.pictures.map((image) => {
+      const data = new FormData();
+      data.append('image', image, image.name);
+      return axios.post('http://localhost:3001/uploadImage', data);
+    });
+    axios.all(uploadPromises)
+      .then((results) => {
+        console.log('server response: ');
+        const url = JSON.stringify(results[0].data.downloadUrl);
+        this.props.updateURL(results[0].data.downloadUrl);
+        console.log(url);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    const data = {
+      dish_namez: dish_name,
+      url: this.props.url,
+    };
+    console.log(data.dish_namez);
+    axios.post('http://localhost:3001/dishurl', data)
+      .then((response) => {
+        console.log('Status Code : ', response.status);
+        if (response.status === 200) {
+          console.log(response.data);
+          console.log('Post success in dishurl!');
+        } else {
+          console.log('Post error in dishur;!');
+        }
+      });
+  }
+
   render() {
     const { dish_name } = this.state;
     const { ingredients } = this.state;
@@ -101,7 +146,7 @@ class EditDish extends Component {
     const { description } = this.state;
     return (
       <div>
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', position: 'relative', top: '50px' }}>
           <form className="yform">
             <label htmlFor="form-text">Dish Name</label>
             <span className="help-block">Name of Dish</span>
@@ -131,6 +176,19 @@ class EditDish extends Component {
             <button onClick={this.submitForm} type="submit">Save</button>
           </form>
         </div>
+        <div>
+          <img style={{ position: 'relative', bottom: '500px', left: '20px' }} src="" alt="" />
+          <ImageUploader
+            withPreview
+            withIcon
+            buttonText="Choose images"
+            onChange={this.onDrop}
+            imgExtension={['.jpg', '.gif', '.png']}
+            maxFileSize={5242880}
+            style={{ position: 'relative', bottom: '300px', width: '400px' }}
+          />
+          <button style={{ position: 'relative', bottom: '310px', left: '145px' }} onClick={this.uploadImages}>Upload Image</button>
+        </div>
       </div>
     );
   }
@@ -143,6 +201,15 @@ const mapStateToProps = (state) => ({
   description: state.description,
   timings: state.timings,
   dish_name: state.dName,
+  url: state.url,
 });
 
-export default connect(mapStateToProps)(EditDish);
+const mapDispatchToProps = (dispatch) => ({
+  updateURL: (url) => {
+    dispatch({
+      type: 'UPDATE_URL', aurl: url,
+    });
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditDish);

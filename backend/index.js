@@ -4,8 +4,9 @@ const mysql = require('mysql');
 
 const app = express();
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
+  connectionLimit: 15,
+  host: 'aws-simplified.cxa8rexktghk.us-west-1.rds.amazonaws.com',
+  user: 'admin',
   password: 'Ydvhs2015~',
   database: 'yelp_db',
 });
@@ -24,7 +25,9 @@ const ImageController = require('./ImageController');
 app.set('view engine', 'ejs');
 
 // use cors to allow cross origin resource sharing
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+
+app.use(cors({ origin: 'https://peaceful-visvesvaraya-007f46.netlify.app', credentials: true }));
 
 // use express session to maintain session data
 // app.use(session({
@@ -41,14 +44,14 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // Allow Access Control
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
-  res.setHeader('Cache-Control', 'no-cache');
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+//   res.setHeader('Access-Control-Allow-Credentials', 'true');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
+//   res.setHeader('Cache-Control', 'no-cache');
+//   next();
+// });
 
 const restaurants = [
   {
@@ -646,3 +649,5 @@ app.post('/getcustomeremail', (req, res) => {
 // start your server on port 3001
 app.listen(3001);
 console.log('Server Listening on port 3001');
+
+module.exports = app;

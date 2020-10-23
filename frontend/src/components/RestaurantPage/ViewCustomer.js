@@ -132,7 +132,13 @@ class ViewCustomer extends Component {
             {res.phone}
           </p>
         </div>
-        <img src={url} alt="" style={{ position: 'relative', bottom: '470px', left: '20px', border: 'solid' }} />
+        <img
+          src="https://yelppictures.s3-us-west-1.amazonaws.com/85b29161-0328-4f97-ab30-84cb0af962a6"
+          alt=""
+          style={{
+            position: 'relative', bottom: '470px', left: '20px', border: 'solid',
+          }}
+        />
       </div>
     );
   }
